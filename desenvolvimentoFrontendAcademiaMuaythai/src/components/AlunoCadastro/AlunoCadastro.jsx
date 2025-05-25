@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./AlunoCadastro.css";
 
 const AlunoCadastro = () => {
@@ -123,6 +124,7 @@ const AlunoCadastro = () => {
         />
 
         <button type="submit">Cadastrar Aluno</button>
+        <Link to="/">Voltar ao Login</Link>
       </form>
     </div>
   );

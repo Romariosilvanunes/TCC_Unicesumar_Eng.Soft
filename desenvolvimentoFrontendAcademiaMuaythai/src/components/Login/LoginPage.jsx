@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Login.css";
 
-const LoginPage = () => {
+const Login = () => {
   return (
     <div className="fundoLogin">
       <main className="conteudoLogin">
@@ -43,7 +44,7 @@ const LoginPage = () => {
 
           <div className="registrar-conta">
             <p>
-              Não tem conta? <a href="#">Cadastre-se</a>
+              Não tem conta? <Link to="/Proprietario">Cadastre-se</Link>
             </p>
           </div>
         </form>
@@ -52,4 +53,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;
