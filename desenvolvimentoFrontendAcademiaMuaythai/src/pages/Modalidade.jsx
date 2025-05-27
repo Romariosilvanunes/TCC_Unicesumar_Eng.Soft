@@ -9,7 +9,11 @@ export default function Modalidades() {
     valor: "",
   });
 
-  const [lista, setLista] = useState([]);
+  const [lista, setLista] = useState(() => {
+    // Recupera modalidades salvas ao carregar a página
+    const data = localStorage.getItem("modalidades");
+    return data ? JSON.parse(data) : [];
+  });
 
   const handleChange = (e) => {
     setModalidade({ ...modalidade, [e.target.name]: e.target.value });
@@ -17,7 +21,13 @@ export default function Modalidades() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLista([...lista, modalidade]);
+
+    const novaLista = [...lista, modalidade];
+    setLista(novaLista);
+
+    // Salva no localStorage
+    localStorage.setItem("modalidades", JSON.stringify(novaLista));
+
     setModalidade({ nome: "", dias: "", horario: "", valor: "" });
   };
 

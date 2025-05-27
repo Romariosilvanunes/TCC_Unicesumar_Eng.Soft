@@ -8,7 +8,11 @@ export default function Pagamentos() {
     status: "Pendente",
   });
 
-  const [pagamentos, setPagamentos] = useState([]);
+  const [pagamentos, setPagamentos] = useState(() => {
+    // Recupera pagamentos salvos ao carregar a página
+    const data = localStorage.getItem("pagamentos");
+    return data ? JSON.parse(data) : [];
+  });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -16,7 +20,13 @@ export default function Pagamentos() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setPagamentos([...pagamentos, form]);
+
+    const novaLista = [...pagamentos, form];
+    setPagamentos(novaLista);
+
+    // Salva no localStorage
+    localStorage.setItem("pagamentos", JSON.stringify(novaLista));
+
     setForm({ aluno: "", valor: "", status: "Pendente" });
   };
 
@@ -24,6 +34,9 @@ export default function Pagamentos() {
     const novaLista = [...pagamentos];
     novaLista[index].status = "Pago";
     setPagamentos(novaLista);
+
+    // Atualiza o localStorage
+    localStorage.setItem("pagamentos", JSON.stringify(novaLista));
   };
 
   const total = pagamentos.reduce((soma, p) => soma + Number(p.valor), 0);

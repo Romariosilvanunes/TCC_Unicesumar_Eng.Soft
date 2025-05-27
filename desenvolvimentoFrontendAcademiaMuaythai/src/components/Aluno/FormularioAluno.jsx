@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./FormularioAluno";
+import "./FormularioAluno.css";
 
 const AlunoCadastro = () => {
   const [formData, setFormData] = useState({
@@ -15,10 +15,16 @@ const AlunoCadastro = () => {
     horario: "",
   });
 
+  // Estado para armazenar a lista de alunos, carregando do localStorage
+  const [alunos, setAlunos] = useState(() => {
+    const dadosSalvos = localStorage.getItem("alunos");
+    return dadosSalvos ? JSON.parse(dadosSalvos) : [];
+  });
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (type === "checkbox") {
+    if (type === "checkbox" && name === "dias") {
       setFormData((prev) => ({
         ...prev,
         dias: checked
@@ -35,8 +41,25 @@ const AlunoCadastro = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Dados do aluno:", formData);
-    // Aqui você pode chamar o backend futuramente com axios ou fetch
+
+    const novaLista = [...alunos, formData];
+    setAlunos(novaLista);
+    localStorage.setItem("alunos", JSON.stringify(novaLista));
+
+    alert("Aluno cadastrado com sucesso!");
+
+    // Limpa o formulário
+    setFormData({
+      nome: "",
+      nascimento: "",
+      cpf: "",
+      endereco: "",
+      responsavel: "",
+      graduacao: "",
+      modalidade: "",
+      dias: [],
+      horario: "",
+    });
   };
 
   return (
@@ -105,7 +128,7 @@ const AlunoCadastro = () => {
           {["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((dia) => (
             <label key={dia}>
               <input
-                type="radio"
+                type="checkbox"
                 name="dias"
                 value={dia}
                 checked={formData.dias.includes(dia)}
@@ -115,6 +138,7 @@ const AlunoCadastro = () => {
             </label>
           ))}
         </fieldset>
+
         <input
           type="time"
           name="horario"
