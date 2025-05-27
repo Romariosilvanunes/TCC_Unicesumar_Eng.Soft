@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import "./Relatorios.css";
+
+const COLORS = ["#de5d0c", "#ffa726", "#42a5f5", "#66bb6a", "#ab47bc"];
 
 export default function Relatorios() {
   const [dados, setDados] = useState({
@@ -10,7 +20,8 @@ export default function Relatorios() {
     totalRegistrado: 0,
   });
 
-  // carrega do localStorage sempre que a página abrir
+  const [dadosGrafico, setDadosGrafico] = useState([]);
+
   useEffect(() => {
     const alunos = JSON.parse(localStorage.getItem("alunos")) || [];
     const modalidades = JSON.parse(localStorage.getItem("modalidades")) || [];
@@ -24,6 +35,20 @@ export default function Relatorios() {
       .filter((p) => p.status === "Pago")
       .reduce((soma, p) => soma + Number(p.valor), 0);
 
+    // Agrupar por modalidade
+    const contagemPorModalidade = {};
+    alunos.forEach((aluno) => {
+      const mod = aluno.modalidade || "Não informado";
+      contagemPorModalidade[mod] = (contagemPorModalidade[mod] || 0) + 1;
+    });
+
+    const dadosGrafico = Object.entries(contagemPorModalidade).map(
+      ([modalidade, quantidade]) => ({
+        name: modalidade,
+        value: quantidade,
+      })
+    );
+
     setDados({
       alunos: alunos.length,
       modalidades: modalidades.length,
@@ -31,6 +56,8 @@ export default function Relatorios() {
       totalRegistrado,
       totalRecebido,
     });
+
+    setDadosGrafico(dadosGrafico);
   }, []);
 
   return (
@@ -42,12 +69,10 @@ export default function Relatorios() {
           <h3>Alunos</h3>
           <p>{dados.alunos}</p>
         </div>
-
         <div className="card">
           <h3>Modalidades</h3>
           <p>{dados.modalidades}</p>
         </div>
-
         <div className="card">
           <h3>Pagamentos</h3>
           <p>{dados.pagamentos}</p>
@@ -68,6 +93,34 @@ export default function Relatorios() {
           {(dados.totalRegistrado - dados.totalRecebido).toFixed(2)}
         </p>
       </div>
+
+      {dadosGrafico.length > 0 && (
+        <div className="grafico">
+          <h3>Distribuição de Alunos por Modalidade</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={dadosGrafico}
+                cx="50%"
+                cy="50%"
+                label
+                outerRadius={100}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {dadosGrafico.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   );
 }

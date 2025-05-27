@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import "./FormularioAluno.css";
 
 const AlunoCadastro = () => {
@@ -15,11 +17,12 @@ const AlunoCadastro = () => {
     horario: "",
   });
 
-  // Estado para armazenar a lista de alunos, carregando do localStorage
   const [alunos, setAlunos] = useState(() => {
     const dadosSalvos = localStorage.getItem("alunos");
     return dadosSalvos ? JSON.parse(dadosSalvos) : [];
   });
+
+  const [indiceEdicao, setIndiceEdicao] = useState(null); // novo estado
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,14 +44,18 @@ const AlunoCadastro = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let novaLista = [...alunos];
 
-    const novaLista = [...alunos, formData];
+    if (indiceEdicao !== null) {
+      novaLista[indiceEdicao] = formData;
+      alert("Aluno atualizado com sucesso!");
+    } else {
+      novaLista.push(formData);
+      alert("Aluno cadastrado com sucesso!");
+    }
+
     setAlunos(novaLista);
     localStorage.setItem("alunos", JSON.stringify(novaLista));
-
-    alert("Aluno cadastrado com sucesso!");
-
-    // Limpa o formulário
     setFormData({
       nome: "",
       nascimento: "",
@@ -60,6 +67,40 @@ const AlunoCadastro = () => {
       dias: [],
       horario: "",
     });
+    setIndiceEdicao(null);
+  };
+
+  const excluirAluno = (index) => {
+    const novaLista = [...alunos];
+    novaLista.splice(index, 1);
+    setAlunos(novaLista);
+    localStorage.setItem("alunos", JSON.stringify(novaLista));
+  };
+
+  const editarAluno = (index) => {
+    const alunoSelecionado = alunos[index];
+    setFormData(alunoSelecionado);
+    setIndiceEdicao(index);
+  };
+
+  const exportarPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Relatório de Alunos Cadastrados", 14, 16);
+
+    const dadosTabela = alunos.map((a) => [
+      a.nome,
+      a.modalidade,
+      a.horario,
+      a.dias.join(", "),
+    ]);
+
+    doc.autoTable({
+      head: [["Nome", "Modalidade", "Horário", "Dias"]],
+      body: dadosTabela,
+      startY: 20,
+    });
+
+    doc.save("relatorio_alunos.pdf");
   };
 
   return (
@@ -147,9 +188,39 @@ const AlunoCadastro = () => {
           required
         />
 
-        <button type="submit">Cadastrar Aluno</button>
+        <button type="submit">
+          {indiceEdicao !== null ? "Atualizar Aluno" : "Cadastrar Aluno"}
+        </button>
         <Link to="/">Voltar ao Login</Link>
       </form>
+
+      {/* LISTAGEM DOS ALUNOS */}
+      <div className="lista-alunos">
+        <h3>Alunos Cadastrados</h3>
+        {alunos.length === 0 ? (
+          <p>Nenhum aluno cadastrado ainda.</p>
+        ) : (
+          <>
+            <ul>
+              {alunos.map((aluno, index) => (
+                <li key={index}>
+                  <span>
+                    <strong>{aluno.nome}</strong> — {aluno.modalidade} às{" "}
+                    {aluno.horario}
+                  </span>
+                  <div>
+                    <button onClick={() => editarAluno(index)}>Editar</button>
+                    <button onClick={() => excluirAluno(index)}>Excluir</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <button onClick={exportarPDF} className="exportar-pdf">
+              Exportar PDF
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
