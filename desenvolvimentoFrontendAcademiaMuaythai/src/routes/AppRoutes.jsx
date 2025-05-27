@@ -3,19 +3,32 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LoginPage from "../components/Login/LoginPage";
 import CadastroProprietario from "../components/Proprietario/CadastroProprietario";
-import AlunoCadastro from "../components/AlunoCadastro/AlunoCadastro";
+import Dashboard from "../pages/Dashboard";
+import AlunoCadastro from "../components/Aluno/FormularioAluno";
+import Modalidades from "../pages/Modalidade";
+import Pagamentos from "../pages/Pagamentos";
+import Relatorios from "../pages/Relatorios";
 
-function AppRoutes() {
+import PrivateRoute from "./PrivateRoute";
+
+export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/Proprietario" element={<CadastroProprietario />} />
-        <Route path="/dashboard/cadastro-aluno" element={<AlunoCadastro />} />
-        {/* Outras rotas do sistema virão aqui */}
+
+        {/* ROTAS PROTEGIDAS DENTRO DO DASHBOARD */}
+        <Route path="/dashboard" element={<PrivateRoute />}>
+          <Route element={<Dashboard />}>
+            <Route path="cadastro-aluno" element={<AlunoCadastro />} />
+            <Route path="modalidades" element={<Modalidades />} />
+            <Route path="pagamentos" element={<Pagamentos />} />
+            <Route path="relatorios" element={<Relatorios />} />
+            <Route index element={<h2>Bem-vindo ao painel!</h2>} />
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default AppRoutes;

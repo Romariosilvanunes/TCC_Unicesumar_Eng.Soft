@@ -16,7 +16,7 @@ const Dashboard = () => {
   const toggleSidebar = () => setOpen(!open);
 
   const logout = () => {
-    // futuramente: remover token, navegar para /
+    // Futuramente: remover token, navegar para /
     window.location.href = "/";
   };
 

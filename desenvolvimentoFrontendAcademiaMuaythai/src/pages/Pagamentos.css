@@ -1,0 +1,82 @@
+.pagamentos-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  font-family: "Poppins", sans-serif;
+}
+
+.pagamentos-container h2,
+.pagamentos-container h3 {
+  color: #de5d0c;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.pagamentos-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.pagamentos-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #de5d0c;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pagamentos-form button:hover {
+  background-color: #ff784e;
+}
+
+.resumo p {
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.lista-pagamentos {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.lista-pagamentos li {
+  background: #f7f7f7;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lista-pagamentos li.pago {
+  background-color: #d2ffd2;
+  color: #1a6d1a;
+}
+
+.lista-pagamentos li.pendente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.lista-pagamentos button {
+  padding: 6px 12px;
+  font-size: 12px;
+  background-color: #de5d0c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

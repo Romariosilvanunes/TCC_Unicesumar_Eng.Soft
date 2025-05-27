@@ -17,11 +17,12 @@ const CadastroProprietario = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Cadastro Proprietário:", formData);
 
-    // Aqui será onde você chama o backend futuramente
-    // Depois de cadastrar com sucesso:
-    navigate("/"); // redireciona para login
+    // Salvando no localStorage
+    localStorage.setItem("proprietario", JSON.stringify(formData));
+
+    alert("Cadastro realizado! Faça o login.");
+    navigate("/"); // Redireciona para a tela de login
   };
 
   return (
