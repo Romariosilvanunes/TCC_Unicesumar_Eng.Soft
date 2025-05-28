@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   PieChart,
   Pie,
   Cell,
   Tooltip,
-  ResponsiveContainer,
   Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
 import "./Relatorios.css";
 
@@ -16,17 +21,21 @@ export default function Relatorios() {
     alunos: 0,
     modalidades: 0,
     pagamentos: 0,
-    totalRecebido: 0,
     totalRegistrado: 0,
+    totalRecebido: 0,
   });
 
-  const [dadosGrafico, setDadosGrafico] = useState([]);
+  const [grafAlunosPorModalidade, setGrafAlunosPorModalidade] = useState([]);
+  const [grafPagPorStatus, setGrafPagPorStatus] = useState([]);
+  const [grafPagPorMes, setGrafPagPorMes] = useState([]);
 
   useEffect(() => {
+    /* ---------- coleta localStorage ---------- */
     const alunos = JSON.parse(localStorage.getItem("alunos")) || [];
     const modalidades = JSON.parse(localStorage.getItem("modalidades")) || [];
     const pagamentos = JSON.parse(localStorage.getItem("pagamentos")) || [];
 
+    /* ---------- totais simples ---------- */
     const totalRegistrado = pagamentos.reduce(
       (soma, p) => soma + Number(p.valor),
       0
@@ -34,20 +43,6 @@ export default function Relatorios() {
     const totalRecebido = pagamentos
       .filter((p) => p.status === "Pago")
       .reduce((soma, p) => soma + Number(p.valor), 0);
-
-    // Agrupar por modalidade
-    const contagemPorModalidade = {};
-    alunos.forEach((aluno) => {
-      const mod = aluno.modalidade || "Não informado";
-      contagemPorModalidade[mod] = (contagemPorModalidade[mod] || 0) + 1;
-    });
-
-    const dadosGrafico = Object.entries(contagemPorModalidade).map(
-      ([modalidade, quantidade]) => ({
-        name: modalidade,
-        value: quantidade,
-      })
-    );
 
     setDados({
       alunos: alunos.length,
@@ -57,13 +52,55 @@ export default function Relatorios() {
       totalRecebido,
     });
 
-    setDadosGrafico(dadosGrafico);
+    /* ---------- gráfico 1: Alunos por Modalidade ---------- */
+    const contagemModalidade = {};
+    alunos.forEach((a) => {
+      const m = a.modalidade || "Não informado";
+      contagemModalidade[m] = (contagemModalidade[m] || 0) + 1;
+    });
+    setGrafAlunosPorModalidade(
+      Object.entries(contagemModalidade).map(([mod, qt]) => ({
+        name: mod,
+        value: qt,
+      }))
+    );
+
+    /* ---------- gráfico 2: Pagamentos por Status ---------- */
+    const statusData = [
+      {
+        name: "Pago",
+        value: pagamentos.filter((p) => p.status === "Pago").length,
+      },
+      {
+        name: "Pendente",
+        value: pagamentos.filter((p) => p.status === "Pendente").length,
+      },
+    ];
+    setGrafPagPorStatus(statusData);
+
+    /* ---------- gráfico 3: Valores por Mês (Pago × Pendente) ---------- */
+    const porMes = {};
+    pagamentos.forEach((p) => {
+      const data = new Date(p.data || p.nascimento || Date.now()); // se tiver campo data
+      const chaveMes = `${data.getFullYear()}-${String(
+        data.getMonth() + 1
+      ).padStart(2, "0")}`;
+
+      porMes[chaveMes] = porMes[chaveMes] || {
+        mes: chaveMes,
+        Pago: 0,
+        Pendente: 0,
+      };
+      porMes[chaveMes][p.status] += Number(p.valor);
+    });
+    setGrafPagPorMes(Object.values(porMes));
   }, []);
 
   return (
     <div className="relatorios-container">
       <h2>Relatórios Gerais</h2>
 
+      {/* ---- cards numéricos ---- */}
       <div className="cards">
         <div className="card">
           <h3>Alunos</h3>
@@ -79,6 +116,7 @@ export default function Relatorios() {
         </div>
       </div>
 
+      {/* ---- financeiro ---- */}
       <div className="financeiro">
         <h3>Financeiro</h3>
         <p>
@@ -94,30 +132,70 @@ export default function Relatorios() {
         </p>
       </div>
 
-      {dadosGrafico.length > 0 && (
+      {/* ---- gráfico alunos x modalidade ---- */}
+      {grafAlunosPorModalidade.length > 0 && (
         <div className="grafico">
-          <h3>Distribuição de Alunos por Modalidade</h3>
+          <h3>Alunos por Modalidade</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
-                data={dadosGrafico}
+                data={grafAlunosPorModalidade}
                 cx="50%"
                 cy="50%"
-                label
                 outerRadius={100}
-                fill="#8884d8"
+                label
                 dataKey="value"
               >
-                {dadosGrafico.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
+                {grafAlunosPorModalidade.map((_, idx) => (
+                  <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip />
               <Legend />
             </PieChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {/* ---- gráfico pagamentos por status ---- */}
+      {grafPagPorStatus.some((g) => g.value > 0) && (
+        <div className="grafico">
+          <h3>Pagamentos por Status</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={grafPagPorStatus}
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                label
+                dataKey="value"
+              >
+                {grafPagPorStatus.map((_, idx) => (
+                  <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {/* ---- gráfico valores por mês ---- */}
+      {grafPagPorMes.length > 0 && (
+        <div className="grafico">
+          <h3>Valores por Mês (Pago × Pendente)</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={grafPagPorMes}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="mes" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Pago" stackId="a" fill="#66bb6a" />
+              <Bar dataKey="Pendente" stackId="a" fill="#e57373" />
+            </BarChart>
           </ResponsiveContainer>
         </div>
       )}

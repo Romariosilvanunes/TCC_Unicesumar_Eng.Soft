@@ -10,8 +10,8 @@
 
 .dashboard {
   display: flex;
-  min-height: 100vh;
-  background: var(--bg-light);
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* ========== SIDEBAR ========== */
@@ -21,7 +21,11 @@
   color: var(--text-light);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   transition: width 0.3s ease;
+  min-height: 100vh;
+  position: relative;
+  z-index: 10;
 }
 
 .sidebar.closed,
@@ -95,21 +99,40 @@ nav a.active {
 /* ========== CONTENT ========== */
 .content {
   flex: 1;
-  padding: 30px;
+  height: 100vh;
   overflow-y: auto;
+  padding: 30px;
+  scroll-behavior: smooth;
+
+  /* fundo com imagem exclusiva do dashboard */
+  background-image: url("/fundoDashboard.png");
+  background-size: cover;
+  background-position: flex;
+  background-attachment: 100%;
+
+  color: var(--text-light);
+  backdrop-filter: brightness(0.9);
 }
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
   .sidebar {
     position: fixed;
     height: 100vh;
     z-index: 100;
     transform: translateX(-100%);
+    top: 0;
+    left: 0;
   }
+
   .sidebar.open {
     transform: translateX(0);
   }
+
   .content {
     padding: 20px;
     margin-left: 0;
