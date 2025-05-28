@@ -16,19 +16,20 @@ const Dashboard = () => {
   const toggleSidebar = () => setOpen(!open);
 
   const logout = () => {
-    // Futuramente: remover token, navegar para /
     window.location.href = "/";
   };
 
   return (
     <div className="dashboard">
-      <aside className={open ? "sidebar open" : "sidebar"}>
+      <aside className={`sidebar ${open ? "open" : "closed"}`}>
         <div className="sidebar-header">
-          <h2>
-            Academia
-            <br />
-            MuayThai
-          </h2>
+          {open && (
+            <h2 className="sidebar-title">
+              Academia
+              <br />
+              MuayThai
+            </h2>
+          )}
           <button className="menu-btn" onClick={toggleSidebar}>
             <AiOutlineMenu />
           </button>
@@ -36,21 +37,26 @@ const Dashboard = () => {
 
         <nav>
           <Link to="/dashboard/cadastro-aluno">
-            <AiOutlineUserAdd /> Cadastrar Aluno
+            <AiOutlineUserAdd />
+            {open && "Cadastrar Aluno"}
           </Link>
           <Link to="/dashboard/modalidades">
-            <AiOutlineSchedule /> Modalidades
+            <AiOutlineSchedule />
+            {open && "Modalidades"}
           </Link>
           <Link to="/dashboard/pagamentos">
-            <AiOutlineDollarCircle /> Pagamentos
+            <AiOutlineDollarCircle />
+            {open && "Pagamentos"}
           </Link>
           <Link to="/dashboard/relatorios">
-            <AiOutlineBarChart /> Relatórios
+            <AiOutlineBarChart />
+            {open && "Relatórios"}
           </Link>
         </nav>
 
         <button className="logout-btn" onClick={logout}>
-          <AiOutlineLogout /> Sair
+          <AiOutlineLogout />
+          {open && "Sair"}
         </button>
       </aside>
 
