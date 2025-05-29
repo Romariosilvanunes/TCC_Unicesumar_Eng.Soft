@@ -24,17 +24,7 @@ const Login = () => {
   };
 
   return (
-    <div
-      className="fundoLogin"
-      style={{
-        background: 'url("/fundoLogin.png") no-repeat center center',
-        backgroundSize: "cover",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <div className="fundoLogin">
       <main className="conteudoLogin">
         <form onSubmit={handleSubmit}>
           <h1>Acesso ao Sistema Academia De MuayThai</h1>
