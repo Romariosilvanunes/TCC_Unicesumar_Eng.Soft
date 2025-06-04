@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Modalidade.css";
 
 export default function Modalidades() {
@@ -10,10 +10,13 @@ export default function Modalidades() {
   });
 
   const [lista, setLista] = useState(() => {
-    // Recupera modalidades salvas ao carregar a página
     const data = localStorage.getItem("modalidades");
     return data ? JSON.parse(data) : [];
   });
+
+  useEffect(() => {
+    localStorage.setItem("modalidades", JSON.stringify(lista));
+  }, [lista]);
 
   const handleChange = (e) => {
     setModalidade({ ...modalidade, [e.target.name]: e.target.value });
@@ -22,13 +25,17 @@ export default function Modalidades() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!modalidade.nome.trim()) return;
+
     const novaLista = [...lista, modalidade];
     setLista(novaLista);
-
-    // Salva no localStorage
-    localStorage.setItem("modalidades", JSON.stringify(novaLista));
-
     setModalidade({ nome: "", dias: "", horario: "", valor: "" });
+  };
+
+  const excluirModalidade = (index) => {
+    const novaLista = [...lista];
+    novaLista.splice(index, 1);
+    setLista(novaLista);
   };
 
   return (
@@ -80,6 +87,9 @@ export default function Modalidades() {
               <li key={index}>
                 <strong>{item.nome}</strong> - {item.dias}, {item.horario} - R${" "}
                 {item.valor}
+                <button onClick={() => excluirModalidade(index)}>
+                  Excluir
+                </button>
               </li>
             ))}
           </ul>

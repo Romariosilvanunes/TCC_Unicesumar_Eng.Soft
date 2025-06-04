@@ -1,7 +1,7 @@
 .cadastroAluno {
   max-width: 500px;
   margin: 40px auto;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -18,7 +18,7 @@
 .cadastroAluno form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
 }
 
 .cadastroAluno input,
@@ -27,19 +27,32 @@
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 14px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.cadastroAluno select:invalid {
+  color: #888;
 }
 
 .cadastroAluno fieldset {
   border: none;
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
+  gap: 10px;
   justify-content: center;
   text-align: center;
 }
 
+.cadastroAluno fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+}
+
 .cadastroAluno button {
-  padding: 10px;
+  padding: 12px;
   background-color: #de5d0c;
   color: white;
   font-weight: bold;
@@ -47,10 +60,24 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  transition: background 0.3s;
 }
 
 .cadastroAluno button:hover {
   background-color: #ff784e;
+}
+
+.cadastroAluno a {
+  text-align: center;
+  color: #de5d0c;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none;
+  margin-top: 5px;
+}
+
+.cadastroAluno a:hover {
+  text-decoration: underline;
 }
 
 /* ---------- Listagem de Alunos ---------- */
@@ -82,17 +109,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .lista-alunos li span {
   font-size: 14px;
   color: #333;
+  flex: 1 1 auto;
+  margin-right: 10px;
 }
 
-/* Container dos botões Editar / Excluir */
+/* Botões de ação */
 .lista-alunos li div {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .lista-alunos button {
@@ -102,7 +133,8 @@
   border-radius: 6px;
   padding: 6px 12px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  transition: background 0.3s ease;
 }
 
 .lista-alunos button:hover {
@@ -111,10 +143,11 @@
 
 /* Botão Exportar PDF */
 .exportar-pdf {
-  margin-top: 15px;
+  margin-top: 20px;
   width: 100%;
   background-color: #1e88e5;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 .exportar-pdf:hover {

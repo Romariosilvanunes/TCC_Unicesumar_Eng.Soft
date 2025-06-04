@@ -43,6 +43,12 @@
   margin-top: 30px;
 }
 
+.lista-modalidades h3 {
+  margin-bottom: 15px;
+  color: #de5d0c;
+  text-align: center;
+}
+
 .lista-modalidades ul {
   list-style: none;
   padding-left: 0;
@@ -50,7 +56,29 @@
 
 .lista-modalidades li {
   background-color: #f4f4f4;
-  padding: 12px;
+  padding: 12px 15px;
   border-radius: 6px;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.lista-modalidades li strong {
+  color: #333;
+}
+
+.lista-modalidades li button {
+  background-color: #de5d0c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.lista-modalidades li button:hover {
+  background-color: #ff784e;
 }

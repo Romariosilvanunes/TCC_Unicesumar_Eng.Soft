@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
@@ -22,7 +22,13 @@ const AlunoCadastro = () => {
     return dadosSalvos ? JSON.parse(dadosSalvos) : [];
   });
 
-  const [indiceEdicao, setIndiceEdicao] = useState(null); // novo estado
+  const [modalidades, setModalidades] = useState([]);
+  const [indiceEdicao, setIndiceEdicao] = useState(null);
+
+  useEffect(() => {
+    const lista = JSON.parse(localStorage.getItem("modalidades")) || [];
+    setModalidades(lista);
+  }, [alunos]); // Atualiza também ao editar/remover alunos
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -56,6 +62,7 @@ const AlunoCadastro = () => {
 
     setAlunos(novaLista);
     localStorage.setItem("alunos", JSON.stringify(novaLista));
+
     setFormData({
       nome: "",
       nascimento: "",
@@ -78,8 +85,7 @@ const AlunoCadastro = () => {
   };
 
   const editarAluno = (index) => {
-    const alunoSelecionado = alunos[index];
-    setFormData(alunoSelecionado);
+    setFormData(alunos[index]);
     setIndiceEdicao(index);
   };
 
@@ -151,6 +157,7 @@ const AlunoCadastro = () => {
           value={formData.graduacao}
           onChange={handleChange}
         />
+
         <select
           name="modalidade"
           value={formData.modalidade}
@@ -158,10 +165,11 @@ const AlunoCadastro = () => {
           required
         >
           <option value="">Selecione a Modalidade</option>
-          <option value="Muaythai">Muaythai</option>
-          <option value="Kickboxing">Kickboxing</option>
-          <option value="Taekwondo">Taekwondo</option>
-          <option value="Kids">Aula Infantil</option>
+          {modalidades.map((m, index) => (
+            <option key={index} value={m.nome}>
+              {m.nome}
+            </option>
+          ))}
         </select>
 
         <fieldset>
@@ -191,10 +199,8 @@ const AlunoCadastro = () => {
         <button type="submit">
           {indiceEdicao !== null ? "Atualizar Aluno" : "Cadastrar Aluno"}
         </button>
-        <Link to="/">Voltar ao Login</Link>
       </form>
 
-      {/* LISTAGEM DOS ALUNOS */}
       <div className="lista-alunos">
         <h3>Alunos Cadastrados</h3>
         {alunos.length === 0 ? (
