@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import "./FormularioAluno.css";
@@ -13,8 +12,8 @@ const AlunoCadastro = () => {
     responsavel: "",
     graduacao: "",
     modalidade: "",
-    dias: [],
-    horario: "",
+    // Esses campos serão usados apenas para exibição, pois os horários vêm da modalidade
+    infoHorarios: [], 
   });
 
   const [alunos, setAlunos] = useState(() => {
@@ -28,24 +27,39 @@ const AlunoCadastro = () => {
   useEffect(() => {
     const lista = JSON.parse(localStorage.getItem("modalidades")) || [];
     setModalidades(lista);
-  }, [alunos]); // Atualiza também ao editar/remover alunos
+  }, [alunos]);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    if (type === "checkbox" && name === "dias") {
-      setFormData((prev) => ({
-        ...prev,
-        dias: checked
-          ? [...prev.dias, value]
-          : prev.dias.filter((dia) => dia !== value),
-      }));
+  // Atualiza a exibição dos horários com base na modalidade selecionada
+  useEffect(() => {
+    if (formData.modalidade) {
+      const mod = modalidades.find((m) => m.nome === formData.modalidade);
+      if (mod) {
+        // A nova estrutura possui "horarios" sendo um objeto 
+        // em que cada chave é um dia e o valor é um array de intervalos
+        const displayHorarios = Object.entries(mod.horarios).map(([day, intervals]) => {
+          const intervalsStr = intervals
+            .map((i) => `${i.inicio} às ${i.fim}`)
+            .join(" / ");
+          return `${day}: ${intervalsStr}`;
+        });
+        setFormData((prev) => ({
+          ...prev,
+          infoHorarios: displayHorarios,
+        }));
+      }
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setFormData((prev) => ({ ...prev, infoHorarios: [] }));
     }
+  }, [formData.modalidade, modalidades]);
+
+  // Removemos "type" da desestruturação, pois não está sendo usado
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    // Se os campos de horário vierem da modalidade, eles não devem ser editáveis
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -71,8 +85,7 @@ const AlunoCadastro = () => {
       responsavel: "",
       graduacao: "",
       modalidade: "",
-      dias: [],
-      horario: "",
+      infoHorarios: [],
     });
     setIndiceEdicao(null);
   };
@@ -96,12 +109,11 @@ const AlunoCadastro = () => {
     const dadosTabela = alunos.map((a) => [
       a.nome,
       a.modalidade,
-      a.horario,
-      a.dias.join(", "),
+      a.infoHorarios.join(", "),
     ]);
 
     doc.autoTable({
-      head: [["Nome", "Modalidade", "Horário", "Dias"]],
+      head: [["Nome", "Modalidade", "Horários"]],
       body: dadosTabela,
       startY: 20,
     });
@@ -172,29 +184,19 @@ const AlunoCadastro = () => {
           ))}
         </select>
 
-        <fieldset>
-          <legend>Dias da Semana</legend>
-          {["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((dia) => (
-            <label key={dia}>
-              <input
-                type="checkbox"
-                name="dias"
-                value={dia}
-                checked={formData.dias.includes(dia)}
-                onChange={handleChange}
-              />
-              {dia}
-            </label>
-          ))}
-        </fieldset>
-
-        <input
-          type="time"
-          name="horario"
-          value={formData.horario}
-          onChange={handleChange}
-          required
-        />
+        {/* Exibe as informações da modalidade selecionada */}
+        {formData.modalidade && formData.infoHorarios.length > 0 && (
+          <div className="info-modalidade">
+            <p>
+              <strong>Horários Disponíveis:</strong>
+            </p>
+            <ul>
+              {formData.infoHorarios.map((inf, idx) => (
+                <li key={idx}>{inf}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <button type="submit">
           {indiceEdicao !== null ? "Atualizar Aluno" : "Cadastrar Aluno"}
@@ -211,8 +213,7 @@ const AlunoCadastro = () => {
               {alunos.map((aluno, index) => (
                 <li key={index}>
                   <span>
-                    <strong>{aluno.nome}</strong> — {aluno.modalidade} às{" "}
-                    {aluno.horario}
+                    <strong>{aluno.nome}</strong> — {aluno.modalidade}
                   </span>
                   <div>
                     <button onClick={() => editarAluno(index)}>Editar</button>
@@ -232,3 +233,4 @@ const AlunoCadastro = () => {
 };
 
 export default AlunoCadastro;
+

@@ -1,42 +1,141 @@
+:root {
+  --primary-color: #de5d0c;
+  --primary-hover: #ff784e;
+  --background-color: #ffffff;
+  --light-gray: #f4f4f4;
+  --font-family: "Poppins", sans-serif;
+  --text-color: #333;
+}
+
 .modalidade-container {
   max-width: 600px;
   margin: 40px auto;
   padding: 30px;
-  background-color: #ffffff;
+  background-color: var(--background-color);
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  font-family: "Poppins", sans-serif;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-family);
 }
 
 .modalidade-container h2 {
   text-align: center;
   margin-bottom: 25px;
-  color: #de5d0c;
+  color: var(--primary-color);
+  font-size: 2rem;
 }
 
-.modalidade-form input {
+.modalidade-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modalidade-form input[type="text"],
+.modalidade-form input[type="number"],
+.modalidade-form input[type="time"] {
   width: 100%;
   padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 6px;
   border: 1px solid #ccc;
-  font-size: 14px;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.checkbox-group {
+  border: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.checkbox-group legend {
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.dia-section {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.dia-section h4 {
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+.horario-intervalo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.horario-intervalo label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem;
+}
+
+.precificacao-group {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.precificacao-group legend {
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.precificacao-regra {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+}
+
+.precificacao-regra label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.95rem;
 }
 
 .modalidade-form button {
   width: 100%;
   padding: 12px;
-  background-color: #de5d0c;
-  color: white;
-  font-size: 16px;
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  font-size: 1.125rem;
+  font-weight: bold;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .modalidade-form button:hover {
-  background-color: #ff784e;
+  background-color: var(--primary-hover);
 }
 
 .lista-modalidades {
@@ -44,41 +143,59 @@
 }
 
 .lista-modalidades h3 {
-  margin-bottom: 15px;
-  color: #de5d0c;
   text-align: center;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  font-size: 1.5rem;
 }
 
 .lista-modalidades ul {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.modalidade-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--text-color);
+}
+
+.precificacao-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.95rem;
+}
+
+.acoes {
+  display: flex;
+  gap: 8px;
 }
 
 .lista-modalidades li {
-  background-color: #f4f4f4;
+  background-color: var(--light-gray);
   padding: 12px 15px;
   border-radius: 6px;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
-}
-
-.lista-modalidades li strong {
-  color: #333;
+  font-size: 1rem;
 }
 
 .lista-modalidades li button {
-  background-color: #de5d0c;
-  color: white;
+  background-color: var(--primary-color);
+  color: #fff;
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 0.875rem;
+  transition: background-color 0.3s ease;
 }
 
 .lista-modalidades li button:hover {
-  background-color: #ff784e;
+  background-color: var(--primary-hover);
 }

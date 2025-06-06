@@ -3,9 +3,14 @@
   margin: 40px auto;
   padding: 30px;
   background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease-in-out;
+}
+
+.pagamentos-container:hover {
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
 }
 
 .pagamentos-container h2,
@@ -13,36 +18,46 @@
   color: #de5d0c;
   margin-bottom: 20px;
   text-align: center;
+  font-weight: bold;
 }
 
 .pagamentos-form input {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   margin-bottom: 15px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  font-size: 14px;
+  font-size: 15px;
+  transition: border 0.3s ease-in-out;
+}
+
+.pagamentos-form input:focus {
+  border-color: #de5d0c;
+  outline: none;
 }
 
 .pagamentos-form button {
   width: 100%;
-  padding: 12px;
-  background-color: #de5d0c;
+  padding: 14px;
+  background: linear-gradient(135deg, #de5d0c, #ff784e);
   color: white;
   font-size: 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  transition: background 0.3s ease-in-out, transform 0.2s;
 }
 
 .pagamentos-form button:hover {
-  background-color: #ff784e;
+  background: linear-gradient(135deg, #1a6d1a);
+  transform: scale(1.05);
 }
 
 .resumo p {
-  font-size: 14px;
-  margin: 8px 0;
+  font-size: 15px;
+  margin: 10px 0;
+  font-weight: 500;
 }
 
 .lista-pagamentos {
@@ -53,30 +68,43 @@
 
 .lista-pagamentos li {
   background: #f7f7f7;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.lista-pagamentos li:hover {
+  transform: translateX(5px);
 }
 
 .lista-pagamentos li.pago {
   background-color: #d2ffd2;
   color: #1a6d1a;
+  border-left: 5px solid #1a6d1a;
 }
 
 .lista-pagamentos li.pendente {
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: #c50000;
+  color: white;
+  border-left: 5px solid #d9c9c9;
 }
 
 .lista-pagamentos button {
-  padding: 6px 12px;
-  font-size: 12px;
-  background-color: #de5d0c;
+  padding: 6px 10px;
+  font-size: 13px;
+  background: linear-gradient(100deg, #0e0e0d);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 9px;
   cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.lista-pagamentos button:hover {
+  background: linear-gradient(100deg, #de5d0c);
+  transform: scale(1.05);
 }

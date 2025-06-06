@@ -1,18 +1,29 @@
+:root {
+  --primary-color: #de5d0c;
+  --primary-hover: #ff784e;
+  --secondary-color: #1e88e5;
+  --background-color: rgba(255, 255, 255, 0.95);
+  --light-gray: #f5f5f5;
+  --white: #ffffff;
+  --font-family: 'Poppins', sans-serif;
+  --text-color: #333;
+}
+
 .cadastroAluno {
   max-width: 500px;
   margin: 40px auto;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--background-color);
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  font-family: "Poppins", sans-serif;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: var(--font-family);
 }
 
-/* ---------- Formulário ---------- */
 .cadastroAluno h2 {
   text-align: center;
+  color: var(--primary-color);
+  font-size: 2rem;
   margin-bottom: 20px;
-  color: #de5d0c;
 }
 
 .cadastroAluno form {
@@ -26,130 +37,53 @@
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
-  font-size: 14px;
+  font-size: 1rem;
   background-color: #f9f9f9;
-  color: #333;
+  color: var(--text-color);
 }
 
 .cadastroAluno select:invalid {
   color: #888;
 }
 
-.cadastroAluno fieldset {
-  border: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  text-align: center;
-}
-
-.cadastroAluno fieldset label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 13px;
-}
-
-.cadastroAluno button {
-  padding: 12px;
-  background-color: #de5d0c;
-  color: white;
-  font-weight: bold;
-  border: none;
+/* Exibição dos horários da modalidade selecionada */
+.info-modalidade {
+  background-color: #f0f0f0;
+  padding: 10px;
   border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.3s;
+  margin: 10px 0;
 }
 
-.cadastroAluno button:hover {
-  background-color: #ff784e;
-}
-
-.cadastroAluno a {
-  text-align: center;
-  color: #de5d0c;
+.info-modalidade p {
+  margin: 0 0 5px 0;
   font-weight: bold;
-  font-size: 14px;
-  text-decoration: none;
-  margin-top: 5px;
 }
 
-.cadastroAluno a:hover {
-  text-decoration: underline;
-}
-
-/* ---------- Listagem de Alunos ---------- */
-.lista-alunos {
-  margin-top: 40px;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-}
-
-.lista-alunos h3 {
-  color: #de5d0c;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.lista-alunos ul {
+.info-modalidade ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.lista-alunos li {
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+.info-modalidade li {
+  font-size: 0.95rem;
+  color: var(--text-color);
+}
+
+.cadastroAluno button {
   padding: 12px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.lista-alunos li span {
-  font-size: 14px;
-  color: #333;
-  flex: 1 1 auto;
-  margin-right: 10px;
-}
-
-/* Botões de ação */
-.lista-alunos li div {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.lista-alunos button {
-  background-color: #de5d0c;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-size: 13px;
-  transition: background 0.3s ease;
-}
-
-.lista-alunos button:hover {
-  background-color: #ff784e;
-}
-
-/* Botão Exportar PDF */
-.exportar-pdf {
-  margin-top: 20px;
-  width: 100%;
-  background-color: #1e88e5;
-  font-size: 15px;
+  background-color: var(--primary-color);
+  color: var(--white);
   font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
 }
 
-.exportar-pdf:hover {
-  background-color: #42a5f5;
+.cadastroAluno button:hover {
+  background-color: var(--primary-hover);
 }
+
+/* Lista de

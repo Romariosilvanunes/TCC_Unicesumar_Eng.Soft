@@ -9,7 +9,6 @@ export default function Pagamentos() {
   });
 
   const [pagamentos, setPagamentos] = useState(() => {
-    // Recupera pagamentos salvos ao carregar a página
     const data = localStorage.getItem("pagamentos");
     return data ? JSON.parse(data) : [];
   });
@@ -24,7 +23,6 @@ export default function Pagamentos() {
     const novaLista = [...pagamentos, form];
     setPagamentos(novaLista);
 
-    // Salva no localStorage
     localStorage.setItem("pagamentos", JSON.stringify(novaLista));
 
     setForm({ aluno: "", valor: "", status: "Pendente" });
@@ -35,7 +33,13 @@ export default function Pagamentos() {
     novaLista[index].status = "Pago";
     setPagamentos(novaLista);
 
-    // Atualiza o localStorage
+    localStorage.setItem("pagamentos", JSON.stringify(novaLista));
+  };
+
+  const excluirPagamento = (index) => {
+    const novaLista = pagamentos.filter((_, i) => i !== index);
+    setPagamentos(novaLista);
+
     localStorage.setItem("pagamentos", JSON.stringify(novaLista));
   };
 
@@ -94,6 +98,7 @@ export default function Pagamentos() {
                   Marcar como pago
                 </button>
               )}
+              <button onClick={() => excluirPagamento(index)}>Excluir</button>
             </li>
           ))
         )}
