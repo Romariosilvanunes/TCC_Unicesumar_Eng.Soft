@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "jspdf-autotable";
+import { Link } from "react-router-dom";
 import "./FormularioAluno.css";
 
-const AlunoCadastro = () => {
+const FormularioAluno = () => {
   const [formData, setFormData] = useState({
     nome: "",
     nascimento: "",
@@ -24,12 +24,17 @@ const AlunoCadastro = () => {
   const [modalidades, setModalidades] = useState([]);
   const [indiceEdicao, setIndiceEdicao] = useState(null);
 
+  // Verifica se já há um responsável cadastrado (armazenado no localStorage)
+  const responsavelRegistrado = localStorage.getItem("responsavel")
+    ? JSON.parse(localStorage.getItem("responsavel"))
+    : null;
+
   useEffect(() => {
     const lista = JSON.parse(localStorage.getItem("modalidades")) || [];
     setModalidades(lista);
   }, [alunos]);
 
-  // Atualiza os dias e horários disponíveis com base na modalidade selecionada
+  // Atualiza os dias e horários disponíveis conforme a modalidade selecionada
   useEffect(() => {
     if (formData.modalidade) {
       const mod = modalidades.find((m) => m.nome === formData.modalidade);
@@ -51,7 +56,7 @@ const AlunoCadastro = () => {
     }
   }, [formData.modalidade, modalidades]);
 
-  // Função unificada para atualizar os campos de texto
+  // Atualiza os campos a partir dos inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -60,7 +65,20 @@ const AlunoCadastro = () => {
     }));
   };
 
-  // Manipula a seleção dos dias
+  // Função para calcular a idade a partir da data de nascimento
+  const computeAge = (birthDate) => {
+    if (!birthDate) return 0;
+    const today = new Date();
+    const dob = new Date(birthDate);
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+  // Tratamento da seleção dos dias
   const handleDiaSelecionado = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => {
@@ -71,7 +89,7 @@ const AlunoCadastro = () => {
     });
   };
 
-  // Manipula a seleção de horários para cada dia e atualiza o valor da mensalidade
+  // Tratamento da seleção dos horários e atualização do valor da mensalidade
   const handleHorarioSelecionado = (e, dia) => {
     const { value, checked } = e.target;
     setFormData((prevState) => {
@@ -110,6 +128,7 @@ const AlunoCadastro = () => {
     });
   };
 
+  // Envia o formulário – se o aluno for menor de idade, exige que um responsável esteja cadastrado
   const handleSubmit = (e) => {
     e.preventDefault();
     let novaLista = [...alunos];
@@ -118,6 +137,17 @@ const AlunoCadastro = () => {
       novaLista[indiceEdicao] = formData;
       alert("Aluno atualizado com sucesso!");
     } else {
+      // Se o aluno for menor de 18, verifica se há um responsável cadastrado
+      if (formData.nascimento && computeAge(formData.nascimento) < 18) {
+        if (!responsavelRegistrado) {
+          alert(
+            "Para alunos menores de 18 anos é obrigatório cadastrar um responsável."
+          );
+          return;
+        }
+        // Se o responsável já estiver cadastrado, atribui o nome dele automaticamente
+        formData.responsavel = responsavelRegistrado.nome;
+      }
       novaLista.push(formData);
       alert("Aluno cadastrado com sucesso!");
     }
@@ -174,13 +204,30 @@ const AlunoCadastro = () => {
           value={formData.endereco}
           onChange={handleChange}
         />
-        <input
-          type="text"
-          name="responsavel"
-          placeholder="Responsável (se menor)"
-          value={formData.responsavel}
-          onChange={handleChange}
-        />
+
+        {formData.nascimento && computeAge(formData.nascimento) < 18 ? (
+          responsavelRegistrado ? (
+            <p className="responsavel-info">
+              Responsável cadastrado: {responsavelRegistrado.nome}
+            </p>
+          ) : (
+            <div className="responsavel-link-container">
+              <p>Aluno menor de 18 anos. Cadastre o responsável:</p>
+              <Link to="/responsavel" className="linkResponsavel">
+                Cadastrar Responsável
+              </Link>
+            </div>
+          )
+        ) : (
+          <input
+            type="text"
+            name="responsavel"
+            placeholder="Responsável"
+            value={formData.responsavel}
+            onChange={handleChange}
+          />
+        )}
+
         <input
           type="text"
           name="graduacao"
@@ -223,42 +270,47 @@ const AlunoCadastro = () => {
 
             <fieldset className="dias-selecao">
               <legend>Selecione os dias da semana</legend>
-              {Object.keys(
-                modalidades.find((m) => m.nome === formData.modalidade).horarios
-              ).map((dia) => (
-                <label key={dia}>
-                  <input
-                    type="checkbox"
-                    value={dia}
-                    checked={formData.diasSelecionados.includes(dia)}
-                    onChange={handleDiaSelecionado}
-                  />{" "}
-                  {dia}
-                </label>
-              ))}
+              {modalidades.find((m) => m.nome === formData.modalidade)
+                ?.horarios &&
+                Object.keys(
+                  modalidades.find((m) => m.nome === formData.modalidade)
+                    .horarios
+                ).map((dia) => (
+                  <label key={dia}>
+                    <input
+                      type="checkbox"
+                      value={dia}
+                      checked={formData.diasSelecionados.includes(dia)}
+                      onChange={handleDiaSelecionado}
+                    />{" "}
+                    {dia}
+                  </label>
+                ))}
             </fieldset>
 
             {formData.diasSelecionados.map((dia) => (
               <fieldset key={dia} className="horarios-selecao">
                 <legend>Horários disponíveis para {dia}</legend>
-                {modalidades
-                  .find((m) => m.nome === formData.modalidade)
-                  .horarios[dia].map((intervalo, index) => (
-                    <label key={index}>
-                      <input
-                        type="checkbox"
-                        value={`${intervalo.inicio}-${intervalo.fim}`}
-                        onChange={(e) => handleHorarioSelecionado(e, dia)}
-                      />{" "}
-                      {intervalo.inicio} às {intervalo.fim}
-                    </label>
-                  ))}
+                {modalidades.find((m) => m.nome === formData.modalidade)
+                  ?.horarios[dia] &&
+                  modalidades
+                    .find((m) => m.nome === formData.modalidade)
+                    .horarios[dia].map((intervalo, index) => (
+                      <label key={index}>
+                        <input
+                          type="checkbox"
+                          value={`${intervalo.inicio}-${intervalo.fim}`}
+                          onChange={(e) => handleHorarioSelecionado(e, dia)}
+                        />{" "}
+                        {intervalo.inicio} às {intervalo.fim}
+                      </label>
+                    ))}
               </fieldset>
             ))}
           </>
         )}
 
-        <p>
+        <p className="valor-mensalidade">
           <strong>Valor da Mensalidade:</strong> R$ {formData.valorMensalidade}
         </p>
 
@@ -270,4 +322,4 @@ const AlunoCadastro = () => {
   );
 };
 
-export default AlunoCadastro;
+export default FormularioAluno;

@@ -48,6 +48,10 @@ const Dashboard = () => {
             <AiOutlineDollarCircle />
             {open && "Pagamentos"}
           </Link>
+          <Link to="/dashboard/contas-pagar">
+            <AiOutlineDollarCircle />
+            {open && "Contas a Pagar"}
+          </Link>
           <Link to="/dashboard/relatorios">
             <AiOutlineBarChart />
             {open && "Relatórios"}

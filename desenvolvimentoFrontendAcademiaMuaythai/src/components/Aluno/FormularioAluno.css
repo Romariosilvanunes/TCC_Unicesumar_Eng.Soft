@@ -11,7 +11,7 @@ body {
   color: var(--text-color);
 }
 
-/* Variáveis de cor e fontes */
+/* Variáveis CSS */
 :root {
   --primary-color: #de5d0c;
   --primary-hover: #ff784e;
@@ -23,7 +23,7 @@ body {
   --text-color: #333;
 }
 
-/* Container principal do cadastro */
+/* Container principal do formulário */
 .cadastroAluno {
   max-width: 500px;
   margin: 40px auto;
@@ -33,7 +33,7 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Título do formulário */
+/* Título */
 .cadastroAluno h2 {
   text-align: center;
   color: var(--primary-color);
@@ -41,7 +41,7 @@ body {
   margin-bottom: 20px;
 }
 
-/* Formulário e seus elementos */
+/* Formulário e elementos internos */
 .cadastroAluno form {
   display: flex;
   flex-direction: column;
@@ -69,7 +69,28 @@ body {
   color: #888;
 }
 
-/* Exibição das informações de horários da modalidade */
+/* Estilos para o bloco de cadastro do responsável */
+.responsavel-link-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.linkResponsavel {
+  color: var(--primary-color);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.responsavel-info {
+  font-size: 1rem;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* Exibição dos horários da modalidade selecionada */
 .info-modalidade {
   background-color: #f0f0f0;
   padding: 10px;
@@ -78,22 +99,11 @@ body {
 }
 
 .info-modalidade p {
-  margin-bottom: 5px;
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
-.info-modalidade ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.info-modalidade li {
-  font-size: 0.95rem;
-  color: var(--text-color);
-}
-
-/* Seleção dos dias disponíveis */
+/* Seleção dos dias */
 .dias-selecao {
   display: flex;
   flex-wrap: wrap;
@@ -118,7 +128,7 @@ body {
   cursor: pointer;
 }
 
-/* Seleção dos horários disponíveis para cada dia */
+/* Seleção de horários */
 .horarios-selecao {
   display: flex;
   flex-direction: column;
@@ -169,83 +179,7 @@ body {
   background-color: var(--primary-hover);
 }
 
-/* Estilos para a lista de alunos (caso implementada) */
-.lista-alunos {
-  margin-top: 40px;
-  padding: 20px;
-  background-color: var(--light-gray);
-  border-radius: 10px;
-}
-
-.lista-alunos h3 {
-  text-align: center;
-  color: var(--primary-color);
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-}
-
-.lista-alunos ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.lista-alunos li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--white);
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-size: 1rem;
-  color: var(--text-color);
-}
-
-.lista-alunos li span {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.lista-alunos li div {
-  display: flex;
-  gap: 8px;
-}
-
-.lista-alunos button {
-  background-color: var(--primary-color);
-  color: var(--white);
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background-color 0.3s;
-}
-
-.lista-alunos button:hover {
-  background-color: var(--primary-hover);
-}
-
-/* Botão para exportação em PDF (se houver funcionalidade) */
-.exportar-pdf {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background-color: var(--secondary-color);
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.exportar-pdf:hover {
-  background-color: #42a5f5;
-}
-
-/* Ajustes responsivos para dispositivos móveis */
+/* Responsividade */
 @media (max-width: 480px) {
   .cadastroAluno {
     margin: 20px;

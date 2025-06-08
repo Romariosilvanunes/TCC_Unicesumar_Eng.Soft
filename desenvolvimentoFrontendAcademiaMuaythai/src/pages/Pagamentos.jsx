@@ -50,7 +50,7 @@ export default function Pagamentos() {
 
   return (
     <div className="pagamentos-container">
-      <h2>Registrar Pagamento</h2>
+      <h2>Registrar Pagamento de Mensalidade</h2>
       <form className="pagamentos-form" onSubmit={handleSubmit}>
         <input
           type="text"

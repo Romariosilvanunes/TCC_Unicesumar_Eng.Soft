@@ -55,13 +55,18 @@ export default function Relatorios() {
       totalRecebido,
     });
 
-    const modalSet = new Set(alunos.map((a) => a.modalidade || "-").filter(Boolean));
+    const modalSet = new Set(
+      alunos.map((a) => a.modalidade || "-").filter(Boolean)
+    );
     setListaModalidades(["todas", ...Array.from(modalSet)]);
 
     const mesesSet = new Set();
     pagamentos.forEach((p) => {
       const d = new Date(p.data || Date.now());
-      const chave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const chave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}`;
       mesesSet.add(chave);
     });
     setListaMeses(["todos", ...Array.from(mesesSet)]);
@@ -76,14 +81,23 @@ export default function Relatorios() {
     );
 
     setGrafPagPorStatus([
-      { name: "Pago", value: pagamentos.filter((p) => p.status === "Pago").length },
-      { name: "Pendente", value: pagamentos.filter((p) => p.status === "Pendente").length },
+      {
+        name: "Pago",
+        value: pagamentos.filter((p) => p.status === "Pago").length,
+      },
+      {
+        name: "Pendente",
+        value: pagamentos.filter((p) => p.status === "Pendente").length,
+      },
     ]);
 
     const porMes = {};
     pagamentos.forEach((p) => {
       const d = new Date(p.data || Date.now());
-      const chave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const chave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}`;
       porMes[chave] = porMes[chave] || { mes: chave, Pago: 0, Pendente: 0 };
       porMes[chave][p.status] += Number(p.valor);
     });
@@ -94,10 +108,15 @@ export default function Relatorios() {
     const pagamentos = JSON.parse(localStorage.getItem("pagamentos")) || [];
 
     const filtrados = pagamentos.filter((p) => {
-      const statusOk = filtroStatus === "todos" || p.status.toLowerCase() === filtroStatus;
-      const modalidadeOk = filtroModalidade === "todas" || p.modalidade === filtroModalidade;
+      const statusOk =
+        filtroStatus === "todos" || p.status.toLowerCase() === filtroStatus;
+      const modalidadeOk =
+        filtroModalidade === "todas" || p.modalidade === filtroModalidade;
       const d = new Date(p.data || Date.now());
-      const mesRef = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const mesRef = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}`;
       const mesOk = filtroMes === "todos" || mesRef === filtroMes;
       return statusOk && modalidadeOk && mesOk;
     });
@@ -127,9 +146,21 @@ export default function Relatorios() {
       .reduce((s, p) => s + Number(p.valor), 0);
     const inadimplente = total - recebido;
 
-    doc.text(`Total Registrado: R$ ${total.toFixed(2)}`, 20, doc.lastAutoTable.finalY + 10);
-    doc.text(`Total Recebido:   R$ ${recebido.toFixed(2)}`, 20, doc.lastAutoTable.finalY + 20);
-    doc.text(`Inadimplente:     R$ ${inadimplente.toFixed(2)}`, 20, doc.lastAutoTable.finalY + 30);
+    doc.text(
+      `Total Registrado: R$ ${total.toFixed(2)}`,
+      20,
+      doc.lastAutoTable.finalY + 10
+    );
+    doc.text(
+      `Total Recebido:   R$ ${recebido.toFixed(2)}`,
+      20,
+      doc.lastAutoTable.finalY + 20
+    );
+    doc.text(
+      `Inadimplente:     R$ ${inadimplente.toFixed(2)}`,
+      20,
+      doc.lastAutoTable.finalY + 30
+    );
 
     doc.save("relatorio-financeiro.pdf");
   };
@@ -139,37 +170,68 @@ export default function Relatorios() {
       <h2>Relatórios Gerais</h2>
 
       <div className="cards">
-        <div className="card"><h3>Alunos</h3><p>{dados.alunos}</p></div>
-        <div className="card"><h3>Modalidades</h3><p>{dados.modalidades}</p></div>
-        <div className="card"><h3>Pagamentos</h3><p>{dados.pagamentos}</p></div>
+        <div className="card">
+          <h3>Alunos</h3>
+          <p>{dados.alunos}</p>
+        </div>
+        <div className="card">
+          <h3>Modalidades</h3>
+          <p>{dados.modalidades}</p>
+        </div>
+        <div className="card">
+          <h3>Pagamentos</h3>
+          <p>{dados.pagamentos}</p>
+        </div>
       </div>
 
       <div className="financeiro">
         <h3>Financeiro</h3>
-        <p><strong>Total registrado:</strong> R$ {dados.totalRegistrado.toFixed(2)}</p>
-        <p><strong>Total recebido:</strong> R$ {dados.totalRecebido.toFixed(2)}</p>
-        <p><strong>Total a receber:</strong> R$ {(dados.totalRegistrado - dados.totalRecebido).toFixed(2)}</p>
+        <p>
+          <strong>Total registrado:</strong> R${" "}
+          {dados.totalRegistrado.toFixed(2)}
+        </p>
+        <p>
+          <strong>Total recebido:</strong> R$ {dados.totalRecebido.toFixed(2)}
+        </p>
+        <p>
+          <strong>Total a receber:</strong> R${" "}
+          {(dados.totalRegistrado - dados.totalRecebido).toFixed(2)}
+        </p>
       </div>
 
       <div className="filtros-wrapper">
-        <select className="filtro-select" value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value)}>
+        <select
+          className="filtro-select"
+          value={filtroStatus}
+          onChange={(e) => setFiltroStatus(e.target.value)}
+        >
           <option value="todos">Status: Todos</option>
           <option value="pago">Status: Pago</option>
           <option value="pendente">Status: Pendente</option>
         </select>
-        <select className="filtro-select" value={filtroModalidade} onChange={(e) => setFiltroModalidade(e.target.value)}>
+        <select
+          className="filtro-select"
+          value={filtroModalidade}
+          onChange={(e) => setFiltroModalidade(e.target.value)}
+        >
           {listaModalidades.map((m) => (
             <option key={m} value={m}>{`Modalidade: ${m}`}</option>
           ))}
         </select>
-        <select className="filtro-select" value={filtroMes} onChange={(e) => setFiltroMes(e.target.value)}>
+        <select
+          className="filtro-select"
+          value={filtroMes}
+          onChange={(e) => setFiltroMes(e.target.value)}
+        >
           {listaMeses.map((m) => (
             <option key={m} value={m}>{`Mês: ${m}`}</option>
           ))}
         </select>
       </div>
 
-      <button className="btn-pdf" onClick={gerarPDF}>Exportar PDF</button>
+      <button className="btn-pdf" onClick={gerarPDF}>
+        Exportar PDF
+      </button>
 
       {/* Gráfico Alunos por Modalidade */}
       {grafAlunosPorModalidade.length > 0 && (
@@ -177,7 +239,14 @@ export default function Relatorios() {
           <h3>Alunos por Modalidade</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-              <Pie data={grafAlunosPorModalidade} cx="50%" cy="50%" outerRadius={100} label dataKey="value">
+              <Pie
+                data={grafAlunosPorModalidade}
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                label
+                dataKey="value"
+              >
                 {grafAlunosPorModalidade.map((_, idx) => (
                   <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
                 ))}
@@ -195,7 +264,14 @@ export default function Relatorios() {
           <h3>Pagamentos por Status</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-              <Pie data={grafPagPorStatus} cx="50%" cy="50%" outerRadius={100} label dataKey="value">
+              <Pie
+                data={grafPagPorStatus}
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                label
+                dataKey="value"
+              >
                 {grafPagPorStatus.map((_, idx) => (
                   <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
                 ))}

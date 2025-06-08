@@ -8,18 +8,27 @@
 }
 
 body,
-html,
-.fundoLogin {
+html {
   height: 100%;
   width: 100%;
-  background: url("/fundoLogin.png") no-repeat center center fixed;
+  overflow: hidden;
+}
+
+.fundoLogin {
+  position: relative; /* antes estava fixed */
+  height: 100vh;
+  width: 100vw;
+  background: url("/fundoLogin.png") no-repeat center center;
   background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 0;
 }
 
 .conteudoLogin {
+  position: relative;
+  z-index: 10;
   width: 90%;
   max-width: 400px;
   background-color: rgba(255, 255, 255, 0.1);
@@ -111,4 +120,19 @@ html,
 
 .registrar-conta a:hover {
   text-decoration: underline;
+}
+
+/* Responsivo extra */
+@media (max-width: 400px) {
+  .conteudoLogin {
+    padding: 20px;
+  }
+
+  .conteudoLogin h1 {
+    font-size: 1.2rem;
+  }
+
+  .formularioLogin input {
+    font-size: 0.9rem;
+  }
 }

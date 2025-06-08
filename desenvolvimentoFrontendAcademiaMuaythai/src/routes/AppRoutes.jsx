@@ -7,6 +7,7 @@ import Dashboard from "../pages/Dashboard";
 import AlunoCadastro from "../components/Aluno/FormularioAluno";
 import Modalidades from "../pages/Modalidade";
 import Pagamentos from "../pages/Pagamentos";
+import ContasPagar from "../pages/ContasPagar";
 import Relatorios from "../pages/Relatorios";
 
 import PrivateRoute from "./PrivateRoute";
@@ -24,6 +25,7 @@ export default function AppRoutes() {
             <Route path="cadastro-aluno" element={<AlunoCadastro />} />
             <Route path="modalidades" element={<Modalidades />} />
             <Route path="pagamentos" element={<Pagamentos />} />
+            <Route path="contas-pagar" element={<ContasPagar />} />
             <Route path="relatorios" element={<Relatorios />} />
             <Route index element={<h2>Bem-vindo ao painel!</h2>} />
           </Route>
