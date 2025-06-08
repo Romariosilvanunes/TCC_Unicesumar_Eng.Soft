@@ -1,3 +1,17 @@
+/* Reset básico e estilos globais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--light-gray);
+  color: var(--text-color);
+}
+
+/* Variáveis de cor e fontes */
 :root {
   --primary-color: #de5d0c;
   --primary-hover: #ff784e;
@@ -5,10 +19,11 @@
   --background-color: rgba(255, 255, 255, 0.95);
   --light-gray: #f5f5f5;
   --white: #ffffff;
-  --font-family: 'Poppins', sans-serif;
+  --font-family: "Poppins", sans-serif;
   --text-color: #333;
 }
 
+/* Container principal do cadastro */
 .cadastroAluno {
   max-width: 500px;
   margin: 40px auto;
@@ -16,9 +31,9 @@
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  font-family: var(--font-family);
 }
 
+/* Título do formulário */
 .cadastroAluno h2 {
   text-align: center;
   color: var(--primary-color);
@@ -26,6 +41,7 @@
   margin-bottom: 20px;
 }
 
+/* Formulário e seus elementos */
 .cadastroAluno form {
   display: flex;
   flex-direction: column;
@@ -40,13 +56,20 @@
   font-size: 1rem;
   background-color: #f9f9f9;
   color: var(--text-color);
+  transition: border-color 0.3s;
+}
+
+.cadastroAluno input:focus,
+.cadastroAluno select:focus {
+  outline: none;
+  border-color: var(--primary-color);
 }
 
 .cadastroAluno select:invalid {
   color: #888;
 }
 
-/* Exibição dos horários da modalidade selecionada */
+/* Exibição das informações de horários da modalidade */
 .info-modalidade {
   background-color: #f0f0f0;
   padding: 10px;
@@ -55,7 +78,7 @@
 }
 
 .info-modalidade p {
-  margin: 0 0 5px 0;
+  margin-bottom: 5px;
   font-weight: bold;
 }
 
@@ -70,6 +93,66 @@
   color: var(--text-color);
 }
 
+/* Seleção dos dias disponíveis */
+.dias-selecao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  align-items: center;
+}
+
+.dias-selecao legend {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.dias-selecao label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Seleção dos horários disponíveis para cada dia */
+.horarios-selecao {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--light-gray);
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.horarios-selecao legend {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.horarios-selecao label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Valor da mensalidade */
+.valor-mensalidade {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+/* Botão de submit */
 .cadastroAluno button {
   padding: 12px;
   background-color: var(--primary-color);
@@ -86,4 +169,106 @@
   background-color: var(--primary-hover);
 }
 
-/* Lista de
+/* Estilos para a lista de alunos (caso implementada) */
+.lista-alunos {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: var(--light-gray);
+  border-radius: 10px;
+}
+
+.lista-alunos h3 {
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.lista-alunos ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lista-alunos li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--white);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.lista-alunos li span {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.lista-alunos li div {
+  display: flex;
+  gap: 8px;
+}
+
+.lista-alunos button {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.3s;
+}
+
+.lista-alunos button:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Botão para exportação em PDF (se houver funcionalidade) */
+.exportar-pdf {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--secondary-color);
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.exportar-pdf:hover {
+  background-color: #42a5f5;
+}
+
+/* Ajustes responsivos para dispositivos móveis */
+@media (max-width: 480px) {
+  .cadastroAluno {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .cadastroAluno h2 {
+    font-size: 1.5rem;
+  }
+
+  .cadastroAluno input,
+  .cadastroAluno select,
+  .cadastroAluno button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .dias-selecao label,
+  .horarios-selecao label {
+    font-size: 0.9rem;
+  }
+
+  .valor-mensalidade {
+    font-size: 1rem;
+  }
+}

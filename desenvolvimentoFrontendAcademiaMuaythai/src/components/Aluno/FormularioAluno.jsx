@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import "./FormularioAluno.css";
 
@@ -12,8 +11,9 @@ const AlunoCadastro = () => {
     responsavel: "",
     graduacao: "",
     modalidade: "",
-    // Esses campos serão usados apenas para exibição, pois os horários vêm da modalidade
-    infoHorarios: [], 
+    diasSelecionados: [],
+    horariosSelecionados: {},
+    valorMensalidade: 0,
   });
 
   const [alunos, setAlunos] = useState(() => {
@@ -29,37 +29,85 @@ const AlunoCadastro = () => {
     setModalidades(lista);
   }, [alunos]);
 
-  // Atualiza a exibição dos horários com base na modalidade selecionada
+  // Atualiza os dias e horários disponíveis com base na modalidade selecionada
   useEffect(() => {
     if (formData.modalidade) {
       const mod = modalidades.find((m) => m.nome === formData.modalidade);
       if (mod) {
-        // A nova estrutura possui "horarios" sendo um objeto 
-        // em que cada chave é um dia e o valor é um array de intervalos
-        const displayHorarios = Object.entries(mod.horarios).map(([day, intervals]) => {
-          const intervalsStr = intervals
-            .map((i) => `${i.inicio} às ${i.fim}`)
-            .join(" / ");
-          return `${day}: ${intervalsStr}`;
-        });
         setFormData((prev) => ({
           ...prev,
-          infoHorarios: displayHorarios,
+          diasSelecionados: [],
+          horariosSelecionados: {},
+          valorMensalidade: 0,
         }));
       }
     } else {
-      setFormData((prev) => ({ ...prev, infoHorarios: [] }));
+      setFormData((prev) => ({
+        ...prev,
+        diasSelecionados: [],
+        horariosSelecionados: {},
+        valorMensalidade: 0,
+      }));
     }
   }, [formData.modalidade, modalidades]);
 
-  // Removemos "type" da desestruturação, pois não está sendo usado
+  // Função unificada para atualizar os campos de texto
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Se os campos de horário vierem da modalidade, eles não devem ser editáveis
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+  };
+
+  // Manipula a seleção dos dias
+  const handleDiaSelecionado = (e) => {
+    const { value, checked } = e.target;
+    setFormData((prev) => {
+      const novosDias = checked
+        ? [...prev.diasSelecionados, value]
+        : prev.diasSelecionados.filter((dia) => dia !== value);
+      return { ...prev, diasSelecionados: novosDias };
+    });
+  };
+
+  // Manipula a seleção de horários para cada dia e atualiza o valor da mensalidade
+  const handleHorarioSelecionado = (e, dia) => {
+    const { value, checked } = e.target;
+    setFormData((prevState) => {
+      const novosHorarios = { ...prevState.horariosSelecionados };
+
+      if (checked) {
+        if (!novosHorarios[dia]) {
+          novosHorarios[dia] = [];
+        }
+        if (!novosHorarios[dia].includes(value)) {
+          novosHorarios[dia].push(value);
+        }
+      } else {
+        if (novosHorarios[dia]) {
+          novosHorarios[dia] = novosHorarios[dia].filter(
+            (horario) => horario !== value
+          );
+        }
+      }
+
+      const totalAulas = Object.values(novosHorarios).reduce(
+        (acc, horarios) => acc + horarios.length,
+        0
+      );
+
+      const mod = modalidades.find((m) => m.nome === prevState.modalidade);
+      const regraPreco = mod?.precificacao.find(
+        (p) => parseInt(p.quantidade, 10) === totalAulas
+      );
+
+      return {
+        ...prevState,
+        horariosSelecionados: novosHorarios,
+        valorMensalidade: regraPreco ? regraPreco.valor : 0,
+      };
+    });
   };
 
   const handleSubmit = (e) => {
@@ -85,40 +133,11 @@ const AlunoCadastro = () => {
       responsavel: "",
       graduacao: "",
       modalidade: "",
-      infoHorarios: [],
+      diasSelecionados: [],
+      horariosSelecionados: {},
+      valorMensalidade: 0,
     });
     setIndiceEdicao(null);
-  };
-
-  const excluirAluno = (index) => {
-    const novaLista = [...alunos];
-    novaLista.splice(index, 1);
-    setAlunos(novaLista);
-    localStorage.setItem("alunos", JSON.stringify(novaLista));
-  };
-
-  const editarAluno = (index) => {
-    setFormData(alunos[index]);
-    setIndiceEdicao(index);
-  };
-
-  const exportarPDF = () => {
-    const doc = new jsPDF();
-    doc.text("Relatório de Alunos Cadastrados", 14, 16);
-
-    const dadosTabela = alunos.map((a) => [
-      a.nome,
-      a.modalidade,
-      a.infoHorarios.join(", "),
-    ]);
-
-    doc.autoTable({
-      head: [["Nome", "Modalidade", "Horários"]],
-      body: dadosTabela,
-      startY: 20,
-    });
-
-    doc.save("relatorio_alunos.pdf");
   };
 
   return (
@@ -169,7 +188,6 @@ const AlunoCadastro = () => {
           value={formData.graduacao}
           onChange={handleChange}
         />
-
         <select
           name="modalidade"
           value={formData.modalidade}
@@ -184,53 +202,72 @@ const AlunoCadastro = () => {
           ))}
         </select>
 
-        {/* Exibe as informações da modalidade selecionada */}
-        {formData.modalidade && formData.infoHorarios.length > 0 && (
-          <div className="info-modalidade">
-            <p>
-              <strong>Horários Disponíveis:</strong>
-            </p>
-            <ul>
-              {formData.infoHorarios.map((inf, idx) => (
-                <li key={idx}>{inf}</li>
+        {formData.modalidade && (
+          <>
+            <fieldset className="info-modalidade">
+              <legend>Horários Disponíveis</legend>
+              {modalidades.find((m) => m.nome === formData.modalidade)
+                ?.horarios &&
+                Object.entries(
+                  modalidades.find((m) => m.nome === formData.modalidade)
+                    .horarios
+                ).map(([dia, intervalos]) => (
+                  <p key={dia}>
+                    <strong>{dia}:</strong>{" "}
+                    {intervalos
+                      .map((i) => `${i.inicio} às ${i.fim}`)
+                      .join(" / ")}
+                  </p>
+                ))}
+            </fieldset>
+
+            <fieldset className="dias-selecao">
+              <legend>Selecione os dias da semana</legend>
+              {Object.keys(
+                modalidades.find((m) => m.nome === formData.modalidade).horarios
+              ).map((dia) => (
+                <label key={dia}>
+                  <input
+                    type="checkbox"
+                    value={dia}
+                    checked={formData.diasSelecionados.includes(dia)}
+                    onChange={handleDiaSelecionado}
+                  />{" "}
+                  {dia}
+                </label>
               ))}
-            </ul>
-          </div>
+            </fieldset>
+
+            {formData.diasSelecionados.map((dia) => (
+              <fieldset key={dia} className="horarios-selecao">
+                <legend>Horários disponíveis para {dia}</legend>
+                {modalidades
+                  .find((m) => m.nome === formData.modalidade)
+                  .horarios[dia].map((intervalo, index) => (
+                    <label key={index}>
+                      <input
+                        type="checkbox"
+                        value={`${intervalo.inicio}-${intervalo.fim}`}
+                        onChange={(e) => handleHorarioSelecionado(e, dia)}
+                      />{" "}
+                      {intervalo.inicio} às {intervalo.fim}
+                    </label>
+                  ))}
+              </fieldset>
+            ))}
+          </>
         )}
+
+        <p>
+          <strong>Valor da Mensalidade:</strong> R$ {formData.valorMensalidade}
+        </p>
 
         <button type="submit">
           {indiceEdicao !== null ? "Atualizar Aluno" : "Cadastrar Aluno"}
         </button>
       </form>
-
-      <div className="lista-alunos">
-        <h3>Alunos Cadastrados</h3>
-        {alunos.length === 0 ? (
-          <p>Nenhum aluno cadastrado ainda.</p>
-        ) : (
-          <>
-            <ul>
-              {alunos.map((aluno, index) => (
-                <li key={index}>
-                  <span>
-                    <strong>{aluno.nome}</strong> — {aluno.modalidade}
-                  </span>
-                  <div>
-                    <button onClick={() => editarAluno(index)}>Editar</button>
-                    <button onClick={() => excluirAluno(index)}>Excluir</button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <button onClick={exportarPDF} className="exportar-pdf">
-              Exportar PDF
-            </button>
-          </>
-        )}
-      </div>
     </div>
   );
 };
 
 export default AlunoCadastro;
-
