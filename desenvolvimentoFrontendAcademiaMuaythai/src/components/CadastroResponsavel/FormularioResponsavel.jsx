@@ -25,10 +25,8 @@ const FormularioResponsavel = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aqui você pode salvar os dados do responsável (por exemplo, no localStorage ou num contexto global)
     localStorage.setItem("responsavel", JSON.stringify(responsavelData));
-    // Após concluir, volta para a página anterior (o formulário do aluno)
-    navigate(-1);
+    navigate("/dashboard/cadastro-aluno"); // ✅ ROTA FIXA
   };
 
   return (
@@ -89,7 +87,16 @@ const FormularioResponsavel = () => {
           value={responsavelData.parentesco}
           onChange={handleChange}
         />
+
         <button type="submit">Concluir Cadastro</button>
+
+        <button
+          type="button"
+          className="botao-voltar"
+          onClick={() => navigate("/dashboard/cadastro-aluno")} // ✅ ROTA FIXA
+        >
+          Voltar
+        </button>
       </form>
     </div>
   );
