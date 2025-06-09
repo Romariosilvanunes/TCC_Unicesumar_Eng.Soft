@@ -179,6 +179,34 @@ body {
   background-color: var(--primary-hover);
 }
 
+/* Seção de forma de pagamento */
+.forma-pagamento {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.forma-pagamento label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.forma-pagamento select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: var(--text-color);
+  transition: border-color 0.3s;
+}
+
+.forma-pagamento select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
 /* Responsividade */
 @media (max-width: 480px) {
   .cadastroAluno {

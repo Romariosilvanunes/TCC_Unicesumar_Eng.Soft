@@ -14,6 +14,7 @@ const FormularioAluno = () => {
     diasSelecionados: [],
     horariosSelecionados: {},
     valorMensalidade: 0,
+    formaPagamento: "", // <-- Novo campo
   });
 
   const [alunos, setAlunos] = useState(() => {
@@ -24,7 +25,6 @@ const FormularioAluno = () => {
   const [modalidades, setModalidades] = useState([]);
   const [indiceEdicao, setIndiceEdicao] = useState(null);
 
-  // Verifica se já há um responsável cadastrado (armazenado no localStorage)
   const responsavelRegistrado = localStorage.getItem("responsavel")
     ? JSON.parse(localStorage.getItem("responsavel"))
     : null;
@@ -34,7 +34,6 @@ const FormularioAluno = () => {
     setModalidades(lista);
   }, [alunos]);
 
-  // Atualiza os dias e horários disponíveis conforme a modalidade selecionada
   useEffect(() => {
     if (formData.modalidade) {
       const mod = modalidades.find((m) => m.nome === formData.modalidade);
@@ -56,7 +55,6 @@ const FormularioAluno = () => {
     }
   }, [formData.modalidade, modalidades]);
 
-  // Atualiza os campos a partir dos inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -65,7 +63,6 @@ const FormularioAluno = () => {
     }));
   };
 
-  // Função para calcular a idade a partir da data de nascimento
   const computeAge = (birthDate) => {
     if (!birthDate) return 0;
     const today = new Date();
@@ -78,7 +75,6 @@ const FormularioAluno = () => {
     return age;
   };
 
-  // Tratamento da seleção dos dias
   const handleDiaSelecionado = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => {
@@ -89,7 +85,6 @@ const FormularioAluno = () => {
     });
   };
 
-  // Tratamento da seleção dos horários e atualização do valor da mensalidade
   const handleHorarioSelecionado = (e, dia) => {
     const { value, checked } = e.target;
     setFormData((prevState) => {
@@ -128,7 +123,6 @@ const FormularioAluno = () => {
     });
   };
 
-  // Envia o formulário – se o aluno for menor de idade, exige que um responsável esteja cadastrado
   const handleSubmit = (e) => {
     e.preventDefault();
     let novaLista = [...alunos];
@@ -137,7 +131,6 @@ const FormularioAluno = () => {
       novaLista[indiceEdicao] = formData;
       alert("Aluno atualizado com sucesso!");
     } else {
-      // Se o aluno for menor de 18, verifica se há um responsável cadastrado
       if (formData.nascimento && computeAge(formData.nascimento) < 18) {
         if (!responsavelRegistrado) {
           alert(
@@ -145,7 +138,6 @@ const FormularioAluno = () => {
           );
           return;
         }
-        // Se o responsável já estiver cadastrado, atribui o nome dele automaticamente
         formData.responsavel = responsavelRegistrado.nome;
       }
       novaLista.push(formData);
@@ -166,6 +158,7 @@ const FormularioAluno = () => {
       diasSelecionados: [],
       horariosSelecionados: {},
       valorMensalidade: 0,
+      formaPagamento: "", // resetar também
     });
     setIndiceEdicao(null);
   };
@@ -235,6 +228,7 @@ const FormularioAluno = () => {
           value={formData.graduacao}
           onChange={handleChange}
         />
+
         <select
           name="modalidade"
           value={formData.modalidade}
@@ -248,6 +242,25 @@ const FormularioAluno = () => {
             </option>
           ))}
         </select>
+
+        {/* NOVO CAMPO - Forma de Pagamento */}
+        {formData.modalidade && (
+          <div className="forma-pagamento">
+            <label htmlFor="formaPagamento">Forma de Pagamento:</label>
+            <select
+              name="formaPagamento"
+              id="formaPagamento"
+              value={formData.formaPagamento}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Selecione a forma de pagamento</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Pix">Pix</option>
+              <option value="Cartão">Cartão</option>
+            </select>
+          </div>
+        )}
 
         {formData.modalidade && (
           <>
