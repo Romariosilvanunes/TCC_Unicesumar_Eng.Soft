@@ -1,19 +1,62 @@
+/* Relatorios.css */
+
+/* Container Geral */
 .relatorios-container {
   max-width: 1000px;
   margin: 40px auto;
   padding: 30px;
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   font-family: "Poppins", sans-serif;
 }
 
 .relatorios-container h2 {
   color: #de5d0c;
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
+/* Menu de Seleção dos Relatórios */
+.menu-relatorios {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.menu-relatorios button {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #777;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.menu-relatorios button:hover,
+.menu-relatorios button.active {
+  color: #de5d0c;
+}
+.menu-relatorios button.active::after,
+.menu-relatorios button:hover::after {
+  content: "";
+  position: absolute;
+  width: 60%;
+  height: 3px;
+  background: #de5d0c;
+  border-radius: 2px;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Cards do Resumo Geral */
 .cards {
   display: flex;
   gap: 20px;
@@ -21,109 +64,287 @@
   justify-content: center;
   margin-bottom: 30px;
 }
-
 .card {
   flex: 1 1 200px;
   background: #f7f7f7;
   border-radius: 10px;
-  text-align: center;
   padding: 25px 15px;
+  text-align: center;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
 }
-
 .card h3 {
   margin-bottom: 10px;
   color: #555;
 }
-
 .card p {
   font-size: 32px;
   font-weight: bold;
   color: #de5d0c;
 }
 
+/* Seção Financeira */
 .financeiro {
   margin-top: 20px;
 }
-
 .financeiro h3 {
   margin-bottom: 15px;
   color: #de5d0c;
 }
-
 .financeiro p {
   font-size: 16px;
   margin: 6px 0;
   color: #333;
 }
 
-.filtros-wrapper {
+/* Filtros e Botões para Pagamentos */
+.filtros-pagamentos {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
   justify-content: center;
-  margin: 30px 0 20px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
-
 .filtro-select {
   min-width: 180px;
   padding: 10px 14px;
   font-size: 14px;
-  border-radius: 8px;
   border: 1px solid #ccc;
-  background-color: #f7f7f7;
+  background: #f7f7f7;
+  border-radius: 8px;
   color: #333;
 }
-
+.botoes-pagamentos,
+.botoes-contas {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
 .btn-pdf {
-  display: block;
-  margin: 10px auto 40px;
   padding: 12px 24px;
-  background-color: #de5d0c;
-  color: white;
+  background: #de5d0c;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
   font-size: 16px;
+  font-weight: bold;
+  color: #fff;
   cursor: pointer;
   transition: background 0.3s ease;
 }
-
 .btn-pdf:hover {
-  background-color: #ff784e;
+  background: #ff784e;
 }
 
-.grafico {
-  margin-top: 40px;
-  padding: 30px;
+/* Lista de Pagamentos */
+.lista-pagamentos {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+}
+.lista-pagamentos li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  background: #f7f7f7;
+}
+.lista-pagamentos li.pago {
+  border-left: 4px solid #66bb6a;
+}
+.lista-pagamentos li.pendente {
+  border-left: 4px solid #e57373;
+}
+.info-pagamento {
+  font-size: 16px;
+  color: #333;
+}
+.acoes-pagamento {
+  display: flex;
+  gap: 8px;
+}
+.btn-marcar,
+.btn-excluir {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.btn-marcar {
+  background: #66bb6a;
+  color: #fff;
+}
+.btn-marcar:hover {
+  background: #57a05b;
+}
+.btn-excluir {
+  background: #e57373;
+  color: #fff;
+}
+.btn-excluir:hover {
+  background: #d05b5b;
+}
+
+/* Master-Detail para Relatório de Alunos */
+.alunos-container {
+  display: flex;
+  gap: 20px;
+  min-height: 400px;
+}
+.alunos-list {
+  width: 30%;
   background: #fff;
+  padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+  max-height: 500px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.alunos-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.alunos-list li {
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+.alunos-list li:hover {
+  background: #de5d0c;
+  color: #fff;
+}
+.alunos-list li.active {
+  background: #ff784e;
+  color: #fff;
+}
+.aluno-detalhe {
+  width: 70%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-height: 500px;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.aluno-detalhe .detalhe-content {
+  line-height: 1.6;
+}
+.aluno-detalhe .detalhe-content h4 {
+  color: #de5d0c;
+  margin-bottom: 15px;
+}
+.aluno-detalhe-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #777;
+}
+
+/* Tabela de Contas a Pagar */
+.table-contasPagar {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.table-contasPagar th,
+.table-contasPagar td {
+  border: 1px solid #ddd;
+  padding: 10px;
   text-align: center;
 }
-
-.grafico h3 {
-  color: #de5d0c;
-  margin-bottom: 20px;
+.table-contasPagar th {
+  background: #de5d0c;
+  color: #fff;
 }
 
-/* Responsivo */
+/* Opções de Relatório para Contas a Pagar */
+.opcoes-relatorio {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+.opcoes-relatorio h4 {
+  margin-bottom: 10px;
+  color: #de5d0c;
+}
+.opcoes-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.opcoes-buttons button {
+  padding: 8px 16px;
+  border: 1px solid #de5d0c;
+  background: transparent;
+  color: #de5d0c;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.opcoes-buttons button.active,
+.opcoes-buttons button:hover {
+  background: #de5d0c;
+  color: #fff;
+}
+.opcoes-status {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+.opcoes-status span {
+  font-size: 16px;
+  color: #333;
+}
+.opcoes-status label {
+  font-size: 14px;
+  color: #333;
+}
+.opcoes-periodo {
+  margin-bottom: 10px;
+}
+.opcoes-periodo span {
+  margin-right: 10px;
+  font-size: 16px;
+  color: #333;
+}
+.opcoes-semana {
+  margin-top: 10px;
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
-  .cards {
+  .menu-relatorios {
     flex-direction: column;
-    align-items: center;
+    gap: 12px;
+    padding: 10px;
   }
-
-  .filtros-wrapper {
+  .alunos-container {
     flex-direction: column;
-    align-items: center;
   }
-
+  .alunos-list,
+  .aluno-detalhe {
+    width: 100%;
+    max-height: none;
+  }
   .filtro-select {
     width: 100%;
     max-width: 300px;
   }
-
   .btn-pdf {
     width: 100%;
     max-width: 300px;
