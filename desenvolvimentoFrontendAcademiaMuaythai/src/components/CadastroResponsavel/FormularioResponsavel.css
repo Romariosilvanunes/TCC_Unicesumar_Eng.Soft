@@ -1,86 +1,102 @@
+/* Reset básico e estilos globais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--light-gray);
+  color: var(--text-color);
+}
+
+/* Variáveis CSS */
+:root {
+  --primary-color: #de5d0c;
+  --primary-hover: #ff784e;
+  --secondary-color: #1e88e5;
+  --background-color: rgba(255, 255, 255, 0.95);
+  --light-gray: #f5f5f5;
+  --white: #ffffff;
+  --font-family: "Poppins", sans-serif;
+  --text-color: #333;
+}
+
+/* Container principal do formulário de Responsável */
 .cadastroResponsavel {
-  width: 100vw;
-  height: 100vh;
-  background: url("fundoDashboard.png") no-repeat center center fixed;
-  background-size: cover;
-  display: flex;
-  flex-direction: column; /* Alterado para coluna para acomodar mensagem e formulário */
-  justify-content: center;
-  align-items: center;
-  font-family: "Poppins", sans-serif;
-  position: relative; /* Mantido para referência do posicionamento absoluto */
-}
-
-.mensagem {
-  position: relative; /* Alterado para relative, mantendo alinhamento dentro do fluxo */
-  margin-bottom: 20px; /* Espaçamento entre a mensagem e o formulário */
-  color: #fff;
-  font-size: 1.5rem;
-  text-align: center;
-  font-weight: bold;
-}
-
-.cadastroResponsavel form {
-  width: 90%;
   max-width: 500px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  padding: 40px 30px;
-  color: #fff;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-  text-align: center;
+  margin: 40px auto;
+  background: var(--background-color);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Título do formulário de Responsável */
 .cadastroResponsavel h2 {
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 2rem;
   margin-bottom: 20px;
-  font-size: 1.8rem;
-  color: #fff;
 }
 
-.cadastroResponsavel input {
-  width: 100%;
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  border: none;
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
+/* Formulário e elementos internos do responsável */
+.cadastroResponsavel form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cadastroResponsavel input,
+.cadastroResponsavel select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
   font-size: 1rem;
+  background-color: #f9f9f9;
+  color: var(--text-color);
+  transition: border-color 0.3s;
 }
 
-.cadastroResponsavel input::placeholder {
-  color: #ddd;
+.cadastroResponsavel input:focus,
+.cadastroResponsavel select:focus {
+  outline: none;
+  border-color: var(--primary-color);
 }
 
+/* Botões do formulário de Responsável */
 .cadastroResponsavel button {
-  width: 100%;
   padding: 12px;
-  margin-top: 10px;
-  background-color: #de5d0c;
-  color: white;
-  border: none;
-  border-radius: 10px;
+  background-color: var(--primary-color);
+  color: var(--white);
   font-weight: bold;
-  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  font-size: 1rem;
+  transition: background-color 0.3s;
 }
 
 .cadastroResponsavel button:hover {
-  background-color: #ff784e;
+  background-color: var(--primary-hover);
 }
 
-/* Botão Voltar */
-.botao-voltar {
-  margin-top: 12px;
-  background-color: transparent;
-  border: 2px solid #ffa726;
-  color: #ffa726;
-}
+/* Responsividade */
+@media (max-width: 480px) {
+  .cadastroResponsavel {
+    margin: 20px;
+    padding: 20px;
+  }
 
-.botao-voltar:hover {
-  background-color: #ffa726;
-  color: #000;
+  .cadastroResponsavel h2 {
+    font-size: 1.5rem;
+  }
+
+  .cadastroResponsavel input,
+  .cadastroResponsavel select,
+  .cadastroResponsavel button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
 }

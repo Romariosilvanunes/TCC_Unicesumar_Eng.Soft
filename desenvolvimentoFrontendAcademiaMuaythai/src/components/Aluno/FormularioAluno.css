@@ -23,7 +23,7 @@ body {
   --text-color: #333;
 }
 
-/* Container principal do formulário */
+/* Container principal do formulário de Aluno */
 .cadastroAluno {
   max-width: 500px;
   margin: 40px auto;
@@ -33,7 +33,7 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Título */
+/* Título do formulário de Aluno */
 .cadastroAluno h2 {
   text-align: center;
   color: var(--primary-color);
@@ -41,7 +41,7 @@ body {
   margin-bottom: 20px;
 }
 
-/* Formulário e elementos internos */
+/* Formulário e elementos internos do aluno */
 .cadastroAluno form {
   display: flex;
   flex-direction: column;
@@ -69,7 +69,7 @@ body {
   color: #888;
 }
 
-/* Estilos para o bloco de cadastro do responsável */
+/* Bloco para cadastro/seleção do responsável */
 .responsavel-link-container {
   display: flex;
   flex-direction: column;

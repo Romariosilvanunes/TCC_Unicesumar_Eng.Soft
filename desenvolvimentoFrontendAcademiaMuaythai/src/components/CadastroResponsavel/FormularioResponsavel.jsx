@@ -25,8 +25,13 @@ const FormularioResponsavel = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("responsavel", JSON.stringify(responsavelData));
-    navigate("/dashboard/cadastro-aluno"); // ✅ ROTA FIXA
+    // Recupera o array de responsáveis já cadastrados ou inicia um novo array
+    const responsaveisSalvos =
+      JSON.parse(localStorage.getItem("responsaveis")) || [];
+    responsaveisSalvos.push(responsavelData);
+    localStorage.setItem("responsaveis", JSON.stringify(responsaveisSalvos));
+
+    navigate("/dashboard/cadastro-aluno"); // Volta para o cadastro de aluno
   };
 
   return (
@@ -93,7 +98,7 @@ const FormularioResponsavel = () => {
         <button
           type="button"
           className="botao-voltar"
-          onClick={() => navigate("/dashboard/cadastro-aluno")} // ✅ ROTA FIXA
+          onClick={() => navigate("/dashboard/cadastro-aluno")}
         >
           Voltar
         </button>

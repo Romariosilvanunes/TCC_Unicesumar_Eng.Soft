@@ -14,7 +14,7 @@ const FormularioAluno = () => {
     diasSelecionados: [],
     horariosSelecionados: {},
     valorMensalidade: 0,
-    formaPagamento: "", // <-- Novo campo
+    formaPagamento: "",
   });
 
   const [alunos, setAlunos] = useState(() => {
@@ -25,9 +25,9 @@ const FormularioAluno = () => {
   const [modalidades, setModalidades] = useState([]);
   const [indiceEdicao, setIndiceEdicao] = useState(null);
 
-  const responsavelRegistrado = localStorage.getItem("responsavel")
-    ? JSON.parse(localStorage.getItem("responsavel"))
-    : null;
+  // Recupera o array de responsáveis cadastrados ou inicia com array vazio
+  const responsaveisRegistrados =
+    JSON.parse(localStorage.getItem("responsaveis")) || [];
 
   useEffect(() => {
     const lista = JSON.parse(localStorage.getItem("modalidades")) || [];
@@ -131,14 +131,14 @@ const FormularioAluno = () => {
       novaLista[indiceEdicao] = formData;
       alert("Aluno atualizado com sucesso!");
     } else {
+      // Aluno menor de 18 precisa ter responsável selecionado ou cadastrado
       if (formData.nascimento && computeAge(formData.nascimento) < 18) {
-        if (!responsavelRegistrado) {
+        if (!formData.responsavel) {
           alert(
-            "Para alunos menores de 18 anos é obrigatório cadastrar um responsável."
+            "Para alunos menores de 18 anos, é obrigatório selecionar ou cadastrar um responsável."
           );
           return;
         }
-        formData.responsavel = responsavelRegistrado.nome;
       }
       novaLista.push(formData);
       alert("Aluno cadastrado com sucesso!");
@@ -158,7 +158,7 @@ const FormularioAluno = () => {
       diasSelecionados: [],
       horariosSelecionados: {},
       valorMensalidade: 0,
-      formaPagamento: "", // resetar também
+      formaPagamento: "",
     });
     setIndiceEdicao(null);
   };
@@ -199,10 +199,20 @@ const FormularioAluno = () => {
         />
 
         {formData.nascimento && computeAge(formData.nascimento) < 18 ? (
-          responsavelRegistrado ? (
-            <p className="responsavel-info">
-              Responsável cadastrado: {responsavelRegistrado.nome}
-            </p>
+          responsaveisRegistrados.length > 0 ? (
+            <select
+              name="responsavel"
+              value={formData.responsavel}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Selecione um responsável</option>
+              {responsaveisRegistrados.map((resp, index) => (
+                <option key={index} value={resp.nome}>
+                  {resp.nome} ({resp.parentesco})
+                </option>
+              ))}
+            </select>
           ) : (
             <div className="responsavel-link-container">
               <p>Aluno menor de 18 anos. Cadastre o responsável:</p>
@@ -322,11 +332,9 @@ const FormularioAluno = () => {
             ))}
           </>
         )}
-
         <p className="valor-mensalidade">
           <strong>Valor da Mensalidade:</strong> R$ {formData.valorMensalidade}
         </p>
-
         <button type="submit">
           {indiceEdicao !== null ? "Atualizar Aluno" : "Cadastrar Aluno"}
         </button>
