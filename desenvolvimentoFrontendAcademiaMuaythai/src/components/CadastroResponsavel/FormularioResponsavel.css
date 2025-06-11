@@ -82,6 +82,23 @@ body {
   background-color: var(--primary-hover);
 }
 
+/* Botão Voltar específico para o formulário de Responsável */
+.botao-voltar {
+  background-color: var(--secondary-color);
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  color: var(--white);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.botao-voltar:hover {
+  background-color: #1565c0;
+}
+
 /* Responsividade */
 @media (max-width: 480px) {
   .cadastroResponsavel {

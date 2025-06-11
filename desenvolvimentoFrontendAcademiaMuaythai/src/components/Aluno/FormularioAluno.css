@@ -49,7 +49,8 @@ body {
 }
 
 .cadastroAluno input,
-.cadastroAluno select {
+.cadastroAluno select,
+.cadastroAluno button {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -162,7 +163,7 @@ body {
   text-align: center;
 }
 
-/* Botão de submit */
+/* Botões do formulário de Aluno */
 .cadastroAluno button {
   padding: 12px;
   background-color: var(--primary-color);
@@ -179,32 +180,43 @@ body {
   background-color: var(--primary-hover);
 }
 
-/* Seção de forma de pagamento */
-.forma-pagamento {
+/* Lista de alunos (dica final) */
+.lista-alunos {
+  margin-top: 30px;
+  background-color: var(--background-color);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.lista-alunos ul {
+  list-style: none;
+}
+
+.lista-alunos li {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.lista-alunos button {
+  margin-left: 10px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Bloco para exibir responsável pré-preenchido */
+.responsavel-preenchido {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-
-.forma-pagamento label {
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--primary-color);
-}
-
-.forma-pagamento select {
+  gap: 10px;
   padding: 10px;
-  border-radius: 8px;
   border: 1px solid #ccc;
-  font-size: 1rem;
-  background-color: #f9f9f9;
-  color: var(--text-color);
-  transition: border-color 0.3s;
-}
-
-.forma-pagamento select:focus {
-  outline: none;
-  border-color: var(--primary-color);
+  border-radius: 8px;
+  background-color: #eef;
 }
 
 /* Responsividade */

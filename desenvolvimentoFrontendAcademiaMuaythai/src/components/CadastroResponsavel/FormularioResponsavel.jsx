@@ -25,13 +25,18 @@ const FormularioResponsavel = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Recupera o array de responsáveis já cadastrados ou inicia um novo array
+
+    // Salva o responsável em uma lista de responsáveis
     const responsaveisSalvos =
       JSON.parse(localStorage.getItem("responsaveis")) || [];
     responsaveisSalvos.push(responsavelData);
     localStorage.setItem("responsaveis", JSON.stringify(responsaveisSalvos));
 
-    navigate("/dashboard/cadastro-aluno"); // Volta para o cadastro de aluno
+    // Salva o responsável recém-criado separadamente para auto-preenchimento
+    localStorage.setItem("novoResponsavel", JSON.stringify(responsavelData));
+
+    // Redireciona de volta ao formulário do aluno
+    navigate("/dashboard/cadastro-aluno");
   };
 
   return (
