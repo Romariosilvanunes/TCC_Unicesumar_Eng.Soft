@@ -25,19 +25,16 @@ const FormularioAluno = () => {
 
   const navigate = useNavigate();
 
-  // Carrega os alunos salvos
   useEffect(() => {
     const salvos = JSON.parse(localStorage.getItem("alunos")) || [];
     setAlunos(salvos);
   }, []);
 
-  // Carrega os responsáveis cadastrados
   useEffect(() => {
     const dadosResp = JSON.parse(localStorage.getItem("responsaveis")) || [];
     setResponsaveis(dadosResp);
   }, []);
 
-  // Recupera os dados temporários do aluno (quando redirecionou para cadastro de responsável)
   useEffect(() => {
     const tempData = localStorage.getItem("formDataTemp");
     if (tempData) {
@@ -46,26 +43,26 @@ const FormularioAluno = () => {
     }
   }, []);
 
-  // Se houver um novo responsável cadastrado, preenche automaticamente o campo
   useEffect(() => {
+    const esperando = localStorage.getItem("esperandoNovoResponsavel");
     const novoResp = localStorage.getItem("novoResponsavel");
-    if (novoResp && !formData.responsavel) {
+
+    if (esperando && novoResp) {
       const dadosResponsavel = JSON.parse(novoResp);
       setFormData((prev) => ({
         ...prev,
         responsavel: `${dadosResponsavel.nome} (${dadosResponsavel.parentesco})`,
       }));
       localStorage.removeItem("novoResponsavel");
+      localStorage.removeItem("esperandoNovoResponsavel");
     }
-  }, [formData]);
+  }, []);
 
-  // Carrega também as modalidades armazenadas (ajuste conforme sua lógica)
   useEffect(() => {
     const lista = JSON.parse(localStorage.getItem("modalidades")) || [];
     setModalidades(lista);
   }, []);
 
-  // Sempre que a modalidade mudar, reseta os campos relacionados
   useEffect(() => {
     if (formData.modalidade) {
       const mod = modalidades.find((m) => m.nome === formData.modalidade);
@@ -87,7 +84,6 @@ const FormularioAluno = () => {
     }
   }, [formData.modalidade, modalidades]);
 
-  // Função para calcular a idade a partir da data de nascimento
   const computeAge = (birthDate) => {
     if (!birthDate) return 0;
     const today = new Date();
@@ -100,7 +96,6 @@ const FormularioAluno = () => {
     return age;
   };
 
-  // Gerencia a seleção dos dias
   const handleDiaSelecionado = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => {
@@ -111,7 +106,6 @@ const FormularioAluno = () => {
     });
   };
 
-  // Gerencia a seleção dos horários por dia e recalcula o valor da mensalidade
   const handleHorarioSelecionado = (e, dia) => {
     const { value, checked } = e.target;
     setFormData((prevState) => {
@@ -146,9 +140,9 @@ const FormularioAluno = () => {
     });
   };
 
-  // Função para redirecionar para o cadastro de responsável
   const handleRedirectResponsavel = () => {
     localStorage.setItem("formDataTemp", JSON.stringify(formData));
+    localStorage.setItem("esperandoNovoResponsavel", "true");
     navigate("/dashboard/cadastro-responsavel");
   };
 
@@ -160,7 +154,6 @@ const FormularioAluno = () => {
     }));
   };
 
-  // Submete o formulário: atualiza em modo de edição ou adiciona um novo aluno
   const handleSubmit = (e) => {
     e.preventDefault();
     let novaLista = [...alunos];
@@ -185,7 +178,6 @@ const FormularioAluno = () => {
     setIndiceEdicao(null);
   };
 
-  // Funções para editar e excluir alunos
   const editarAluno = (index) => {
     const alunoEditado = alunos[index];
     setFormData(alunoEditado);
@@ -199,7 +191,6 @@ const FormularioAluno = () => {
     localStorage.setItem("alunos", JSON.stringify(novaLista));
   };
 
-  // Seleciona a modalidade atual para exibir horários/dias
   const modalidadeSelecionada = modalidades.find(
     (m) => m.nome === formData.modalidade
   );
@@ -239,7 +230,6 @@ const FormularioAluno = () => {
           onChange={handleChange}
         />
 
-        {/* Se o aluno for menor de 18 */}
         {formData.nascimento && computeAge(formData.nascimento) < 18 ? (
           <>
             {formData.responsavel ? (
@@ -252,29 +242,9 @@ const FormularioAluno = () => {
                 </button>
               </div>
             ) : (
-              <>
-                <select
-                  name="responsavel"
-                  value={formData.responsavel}
-                  onChange={(e) =>
-                    setFormData({ ...formData, responsavel: e.target.value })
-                  }
-                  required
-                >
-                  <option value="">Selecione um responsável</option>
-                  {responsaveis.map((resp, index) => (
-                    <option
-                      key={index}
-                      value={`${resp.nome} (${resp.parentesco})`}
-                    >
-                      {resp.nome} ({resp.parentesco})
-                    </option>
-                  ))}
-                </select>
-                <button type="button" onClick={handleRedirectResponsavel}>
-                  Cadastrar Responsável
-                </button>
-              </>
+              <button type="button" onClick={handleRedirectResponsavel}>
+                Cadastrar Responsável
+              </button>
             )}
           </>
         ) : (
@@ -383,7 +353,6 @@ const FormularioAluno = () => {
         </button>
       </form>
 
-      {/* Listagem dos alunos com botões de editar e excluir */}
       <div className="lista-alunos">
         <h3>Alunos Cadastrados</h3>
         {alunos.length === 0 ? (

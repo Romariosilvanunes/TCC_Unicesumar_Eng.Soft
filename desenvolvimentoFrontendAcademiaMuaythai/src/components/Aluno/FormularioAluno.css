@@ -180,7 +180,7 @@ body {
   background-color: var(--primary-hover);
 }
 
-/* Lista de alunos (dica final) */
+/* Lista de alunos */
 .lista-alunos {
   margin-top: 30px;
   background-color: var(--background-color);
@@ -217,6 +217,11 @@ body {
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #eef;
+}
+
+/* Responsável preenchido nome (apenas o nome separado) */
+.responsavel-preenchido strong {
+  color: var(--primary-color);
 }
 
 /* Responsividade */

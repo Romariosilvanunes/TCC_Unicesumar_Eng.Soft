@@ -28,6 +28,10 @@ export default function AppRoutes() {
         <Route path="/dashboard" element={<PrivateRoute />}>
           <Route element={<Dashboard />}>
             <Route path="cadastro-aluno" element={<AlunoCadastro />} />
+            <Route
+              path="cadastro-responsavel"
+              element={<FormularioResponsavel />}
+            />
             <Route path="modalidades" element={<Modalidades />} />
             <Route path="pagamentos" element={<Pagamentos />} />
             <Route path="relatorios" element={<Relatorios />} />

@@ -116,4 +116,12 @@ body {
     font-size: 0.9rem;
     padding: 8px;
   }
+  /* Estilo para mensagens de erro de validação */
+  .cadastroResponsavel .erro {
+    color: #d32f2f; /* Vermelho suave */
+    font-size: 0.85rem;
+    margin-top: -15px;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
 }
