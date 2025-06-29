@@ -25,14 +25,14 @@ const FormularioResponsavel = () => {
     }));
     setErros((prev) => ({
       ...prev,
-      [name]: "", // limpa erro ao digitar
+      [name]: "", // para limpar o erro ao digitar
     }));
   };
 
   const validarCampos = () => {
     const novosErros = {};
 
-    // CPF válido (11 dígitos e verificação simples)
+    //para o CPF válido (11 dígitos e verificação de auxilio)
     const cpf = responsavelData.cpf.replace(/\D/g, "");
     if (!/^\d{11}$/.test(cpf)) {
       novosErros.cpf = "CPF deve conter 11 dígitos numéricos.";
@@ -43,12 +43,11 @@ const FormularioResponsavel = () => {
       novosErros.telefone = "Telefone deve conter DDD e número válido.";
     }
 
-    // Email válido
+    // Email válido para fazer a verificação
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(responsavelData.email)) {
       novosErros.email = "Formato de email inválido.";
     }
 
-    // Parentesco obrigatório
     if (!responsavelData.parentesco.trim()) {
       novosErros.parentesco = "Informe o parentesco com o aluno.";
     }
@@ -62,13 +61,13 @@ const FormularioResponsavel = () => {
 
     if (!validarCampos()) return;
 
-    // Salva o responsável em lista
+    // Salva o responsável na lista
     const responsaveisSalvos =
       JSON.parse(localStorage.getItem("responsaveis")) || [];
     responsaveisSalvos.push(responsavelData);
     localStorage.setItem("responsaveis", JSON.stringify(responsaveisSalvos));
 
-    // Salva para preenchimento automático
+    // faz o preenchimento automático e salva
     localStorage.setItem("novoResponsavel", JSON.stringify(responsavelData));
 
     navigate("/dashboard/cadastro-aluno");

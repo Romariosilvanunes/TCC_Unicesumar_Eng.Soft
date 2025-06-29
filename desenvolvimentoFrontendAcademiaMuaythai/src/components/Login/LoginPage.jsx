@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     const ok = authService.login(form.email, form.senha);
     if (ok) {
-      login(); // Marca autenticado
+      login();
       navigate("/dashboard");
     } else {
       alert("Usuário ou senha inválidos!");

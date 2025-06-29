@@ -5,7 +5,7 @@ export default function Modalidades() {
   // Estrutura da modalidade:
   // - nome: string
   // - horarios: objeto em que cada chave (dia da semana) mapeia para um array de intervalos { inicio, fim }
-  // - precificacao: array de regras { quantidade, valor }
+  // - valores das aulas: array de regras { quantidade, valor }
   const [modalidade, setModalidade] = useState({
     nome: "",
     horarios: {},
@@ -23,14 +23,14 @@ export default function Modalidades() {
     localStorage.setItem("modalidades", JSON.stringify(lista));
   }, [lista]);
 
-  // Atualiza campos simples (nome) e também pode ser utilizado para outros inputs
+  // Atualiza os campos simples (nome)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setModalidade((prev) => ({ ...prev, [name]: value }));
   };
 
   // Ao selecionar um dia via checkbox:
-  // Se marcado, adiciona o dia com um intervalo vazio inicial; se desmarcado, remove o dia.
+  // para que se marcado, adiciona o dia com um intervalo vazio inicial; se desmarcado, remove o dia.
   const handleDiasChange = (e) => {
     const { value, checked } = e.target;
     setModalidade((prev) => {
@@ -46,7 +46,7 @@ export default function Modalidades() {
     });
   };
 
-  // Atualiza um intervalo específico (campo "inicio" ou "fim") para um dia
+  // faz e atualiza um intervalo específico (campo "inicio" ou "fim") para um dia
   const handleIntervaloChange = (e, day, index, field) => {
     const { value } = e.target;
     setModalidade((prev) => {
@@ -64,7 +64,7 @@ export default function Modalidades() {
     });
   };
 
-  // Adiciona um novo intervalo para um dia específico
+  // para adicionar um novo intervalo para um dia específico
   const handleAdicionarIntervalo = (day) => {
     setModalidade((prev) => {
       const dayIntervals = prev.horarios[day] || [];
@@ -78,7 +78,7 @@ export default function Modalidades() {
     });
   };
 
-  // Remove um intervalo do dia
+  //para  remover um intervalo do dia
   const handleRemoverIntervalo = (day, index) => {
     setModalidade((prev) => {
       const dayIntervals = prev.horarios[day] || [];
@@ -90,7 +90,7 @@ export default function Modalidades() {
     });
   };
 
-  // Precificação: altera o valor ou quantidade de uma regra específica
+  // valor da aula: altera o valor ou a  quantidade de uma regra específica
   const handlePrecoChange = (e, index, field) => {
     const { value } = e.target;
     setModalidade((prev) => {
@@ -145,7 +145,7 @@ export default function Modalidades() {
       }
     }
 
-    // Valida a precificação – deve haver pelo menos uma regra com quantidade e valor preenchidos
+    // Valida os valores  – deve haver pelo menos uma regra com quantidade e valor preenchidos
     if (modalidade.precificacao.length === 0) {
       alert("Adicione ao menos uma regra de precificação.");
       return;
@@ -157,7 +157,7 @@ export default function Modalidades() {
       }
     }
 
-    // Validação de conflito: não permitir cadastrar duas modalidades com o mesmo dia e mesmo intervalo (início e fim)
+    // para validação de conflito: não permitir cadastrar duas modalidades com o mesmo dia e mesmo intervalo (início e fim)
     for (let m of lista) {
       const diasExistentes = Object.keys(m.horarios);
       for (let day of days) {
@@ -187,7 +187,7 @@ export default function Modalidades() {
       alert("Modalidade cadastrada com sucesso!");
     }
 
-    // Reseta o formulário
+    // para resetar o formulário
     setModalidade({
       nome: "",
       horarios: {},
@@ -285,7 +285,7 @@ export default function Modalidades() {
           </div>
         ))}
 
-        {/* Seção de Precificação */}
+        {/* Seção dos valores por aula precificação das aulas */}
         <fieldset className="precificacao-group">
           <legend>Valores (por quantidade de aulas)</legend>
           {modalidade.precificacao.map((rule, index) => (
